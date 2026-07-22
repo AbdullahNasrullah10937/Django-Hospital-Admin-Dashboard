@@ -25,10 +25,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['total_directors'] = HospitalDirector.objects.count()
         context['total_wards'] = Ward.objects.count()
         
-        # Recent activities dynamically assembled from recent hospital and director additions
-        recent_hospitals = Hospital.objects.order_by('-hospital_id')[:3]
-        recent_directors = HospitalDirector.objects.order_by('-director_id')[:3]
-        recent_wards = Ward.objects.order_by('-ward_id')[:3]
+        # Recent activities assembled from most recently updated records
+        recent_hospitals = Hospital.objects.order_by('-updated_at')[:3]
+        recent_directors = HospitalDirector.objects.order_by('-updated_at')[:3]
+        recent_wards = Ward.objects.order_by('-updated_at')[:3]
         
         context['recent_hospitals'] = recent_hospitals
         context['recent_directors'] = recent_directors

@@ -23,7 +23,7 @@
         <!-- Header / Logo -->
         <div class="text-center mb-4">
             <img src="{% static 'img/logo.png' %}" alt="Inter BP Hospitals – Admin Management System" class="img-fluid mb-2" style="max-height: 75px;" />
-            <h4 class="font-bold text-dark mb-0">BP Hospitals</h4>
+            <h4 class="fw-bold text-dark mb-0">BP Hospitals</h4>
             <p class="text-muted small">Admin Management Console</p>
         </div>
 
@@ -39,7 +39,7 @@
             {% csrf_token %}
             <!-- Username -->
             <div class="mb-3">
-                <label for="id_username" class="form-label font-bold text-dark">Username</label>
+                <label for="id_username" class="form-label fw-bold text-dark">Username</label>
                 <div class="input-group has-validation">
                     <span class="input-group-text bg-light"><i class="bi bi-person text-muted"></i></span>
                     <input type="text" 
@@ -54,7 +54,7 @@
 
             <!-- Password -->
             <div class="mb-4">
-                <label for="id_password" class="form-label font-bold text-dark">Password</label>
+                <label for="id_password" class="form-label fw-bold text-dark">Password</label>
                 <div class="input-group has-validation">
                     <span class="input-group-text bg-light"><i class="bi bi-lock text-muted"></i></span>
                     <input type="password" 
@@ -68,7 +68,7 @@
             </div>
 
             <!-- Submit -->
-            <button type="submit" class="btn btn-primary w-100 py-2.5 fw-semibold shadow-sm">
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm">
                 <i class="bi bi-box-arrow-in-right me-1"></i> Login to Console
             </button>
         </form>

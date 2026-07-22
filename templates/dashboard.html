@@ -3,113 +3,102 @@
 {% block title %}Dashboard - BP Hospitals Admin{% endblock %}
 
 {% block content %}
-<!-- Header -->
+<!-- ── Page Header ─────────────────────────────────────── -->
 <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
     <div>
-        <h2 class="font-bold text-dark mb-1">Dashboard</h2>
-        <p class="text-muted mb-0">Overview of hospital network statistics and recent system activities.</p>
+        <h2 class="fw-bold text-dark mb-1">Dashboard</h2>
+        <p class="text-muted mb-0 small">Overview of hospital network statistics and recent system activities.</p>
     </div>
-    <div>
-        <a href="{% url 'hospital_create' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
-            <i class="bi bi-plus-circle-fill"></i> Add Hospital
-        </a>
-    </div>
+    <a href="{% url 'hospital_create' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm fw-semibold">
+        <i class="bi bi-plus-circle-fill"></i> Add Hospital
+    </a>
 </div>
 
-<!-- Responsive Stat Cards (col-12 col-md-4 reflow) -->
+<!-- ── Stat Cards (3-col desktop → stacked mobile) ───── -->
 <div class="row g-3 mb-4">
+
     <!-- Card 1: Hospitals -->
     <div class="col-12 col-md-4">
-        <a href="{% url 'hospital_list' %}" class="card bp-card text-decoration-none h-100 p-3">
-            <div class="card-body p-0 d-flex flex-column justify-between">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <div class="p-3 rounded-3 bg-primary bg-opacity-10 text-primary">
-                        <i class="bi bi-hospital-fill fs-3"></i>
-                    </div>
-                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2.5 py-1">
-                        <i class="bi bi-graph-up-arrow me-1"></i>Active
-                    </span>
+        <a href="{% url 'hospital_list' %}" class="card bp-card text-decoration-none h-100 p-4 d-block">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="p-3 rounded-3 bg-primary bg-opacity-10 text-primary">
+                    <i class="bi bi-hospital-fill fs-2"></i>
                 </div>
-                <div>
-                    <span class="text-uppercase text-muted fw-semibold small tracking-wider">Total Hospitals</span>
-                    <h3 class="font-bold text-dark mt-1 mb-0 display-6">{{ total_hospitals }}</h3>
-                </div>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-semibold">Active</span>
             </div>
+            <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size:0.75rem;letter-spacing:0.06em;">Total Hospitals</p>
+            <h3 class="fw-bold text-dark mb-0 display-6">{{ total_hospitals }}</h3>
         </a>
     </div>
 
     <!-- Card 2: Directors -->
     <div class="col-12 col-md-4">
-        <a href="{% url 'director_list' %}" class="card bp-card text-decoration-none h-100 p-3">
-            <div class="card-body p-0 d-flex flex-column justify-between">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <div class="p-3 rounded-3 bg-teal bg-opacity-10 text-info">
-                        <i class="bi bi-person-badge-fill fs-3"></i>
-                    </div>
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2.5 py-1">
-                        <i class="bi bi-dash-lg me-1"></i>Assigned
-                    </span>
+        <a href="{% url 'director_list' %}" class="card bp-card text-decoration-none h-100 p-4 d-block">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="p-3 rounded-3 bg-info bg-opacity-10 text-info">
+                    <i class="bi bi-person-badge-fill fs-2"></i>
                 </div>
-                <div>
-                    <span class="text-uppercase text-muted fw-semibold small tracking-wider">Total Directors</span>
-                    <h3 class="font-bold text-dark mt-1 mb-0 display-6">{{ total_directors }}</h3>
-                </div>
+                <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill fw-semibold">Assigned</span>
             </div>
+            <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size:0.75rem;letter-spacing:0.06em;">Total Directors</p>
+            <h3 class="fw-bold text-dark mb-0 display-6">{{ total_directors }}</h3>
         </a>
     </div>
 
     <!-- Card 3: Wards -->
     <div class="col-12 col-md-4">
-        <a href="{% url 'ward_list' %}" class="card bp-card text-decoration-none h-100 p-3">
-            <div class="card-body p-0 d-flex flex-column justify-between">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <div class="p-3 rounded-3 bg-success bg-opacity-10 text-success">
-                        <i class="bi bi-door-open-fill fs-3"></i>
-                    </div>
-                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2.5 py-1">
-                        <i class="bi bi-graph-up-arrow me-1"></i>Active
-                    </span>
+        <a href="{% url 'ward_list' %}" class="card bp-card text-decoration-none h-100 p-4 d-block">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="p-3 rounded-3 bg-success bg-opacity-10 text-success">
+                    <i class="bi bi-door-open-fill fs-2"></i>
                 </div>
-                <div>
-                    <span class="text-uppercase text-muted fw-semibold small tracking-wider">Total Wards</span>
-                    <h3 class="font-bold text-dark mt-1 mb-0 display-6">{{ total_wards }}</h3>
-                </div>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-semibold">Active</span>
             </div>
+            <p class="text-uppercase text-muted fw-semibold mb-1" style="font-size:0.75rem;letter-spacing:0.06em;">Total Wards</p>
+            <h3 class="fw-bold text-dark mb-0 display-6">{{ total_wards }}</h3>
         </a>
     </div>
+
 </div>
 
-<!-- Activity & Status Panels -->
+<!-- ── Recent Activity + Status Panel ─────────────────── -->
 <div class="row g-3">
-    <!-- Recent Activity -->
+
+    <!-- Recent Hospital Facilities -->
     <div class="col-12 col-lg-8">
         <div class="card bp-card h-100">
-            <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center border-bottom-0">
-                <h5 class="font-bold text-dark mb-0"><i class="bi bi-clock-history me-2 text-primary"></i>Recent Hospital Facilities</h5>
+            <div class="card-header bg-white d-flex justify-content-between align-items-center px-4 py-3 border-bottom">
+                <h5 class="fw-bold text-dark mb-0">
+                    <i class="bi bi-clock-history me-2 text-primary"></i>Recent Hospital Facilities
+                </h5>
                 <a href="{% url 'hospital_list' %}" class="btn btn-sm btn-outline-primary fw-semibold">View All</a>
             </div>
             <div class="card-body p-0">
                 {% if recent_hospitals %}
                     <div class="list-group list-group-flush">
                         {% for hospital in recent_hospitals %}
-                            <div class="list-group-item p-3 d-flex align-items-center justify-content-between border-bottom-0">
+                            <div class="list-group-item border-0 border-bottom px-4 py-3 d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="p-2 rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center"
+                                         style="width:40px;height:40px;">
                                         <i class="bi bi-hospital fs-5"></i>
                                     </div>
                                     <div>
-                                        <h6 class="mb-0 font-bold text-dark">{{ hospital.hospital_name }}</h6>
+                                        <h6 class="fw-bold text-dark mb-0">{{ hospital.hospital_name }}</h6>
                                         <small class="text-muted">{{ hospital.location }} • Founded {{ hospital.founded_year }}</small>
                                     </div>
                                 </div>
-                                <a href="{% url 'hospital_detail' hospital.pk %}" class="btn btn-sm btn-light rounded-circle" title="View Details">
-                                    <i class="bi bi-eye text-primary"></i>
+                                <a href="{% url 'hospital_detail' hospital.pk %}"
+                                   class="btn btn-sm btn-light rounded-circle d-flex align-items-center justify-content-center"
+                                   style="width:32px;height:32px;" title="View Details">
+                                    <i class="bi bi-eye text-primary small"></i>
                                 </a>
                             </div>
                         {% endfor %}
                     </div>
                 {% else %}
-                    <div class="p-4 text-center text-muted">
+                    <div class="p-5 text-center text-muted">
+                        <i class="bi bi-inbox fs-2 d-block mb-2"></i>
                         <p class="mb-0">No hospital records found in database yet.</p>
                     </div>
                 {% endif %}
@@ -117,28 +106,30 @@
         </div>
     </div>
 
-    <!-- Status & Admin Quick Links -->
+    <!-- Quick Links Panel -->
     <div class="col-12 col-lg-4 d-flex flex-column gap-3">
-        <div class="card border-0 bg-primary text-white p-4 rounded-3 shadow-sm position-relative overflow-hidden">
-            <div class="position-relative z-1">
-                <h5 class="font-bold mb-2"><i class="bi bi-shield-check me-2"></i>Network Status</h5>
-                <p class="small text-white-50 mb-3">All hospital management services are operating normally across {{ total_hospitals }} registered facilities.</p>
-                <a href="{% url 'hospital_list' %}" class="btn btn-light btn-sm text-primary fw-bold w-100">
-                    <i class="bi bi-card-checklist me-1"></i> View Directory
-                </a>
-            </div>
+        <div class="card border-0 bg-primary text-white p-4 rounded-3 shadow-sm">
+            <h5 class="fw-bold mb-2"><i class="bi bi-shield-check me-2"></i>Network Status</h5>
+            <p class="text-white-50 small mb-3">
+                All services operating normally across <strong class="text-white">{{ total_hospitals }}</strong> registered facilities.
+            </p>
+            <a href="{% url 'hospital_list' %}" class="btn btn-light btn-sm text-primary fw-bold w-100">
+                <i class="bi bi-card-checklist me-1"></i> View Directory
+            </a>
         </div>
 
-        <div class="card bp-card p-4 text-center border-dashed d-flex flex-column align-items-center justify-content-center flex-grow-1">
-            <div class="p-3 bg-light rounded-circle mb-3 text-secondary">
-                <i class="bi bi-sliders fs-2"></i>
+        <div class="card bp-card p-4 text-center flex-grow-1 d-flex flex-column align-items-center justify-content-center">
+            <div class="rounded-circle bg-light text-secondary d-flex align-items-center justify-content-center mb-3"
+                 style="width:52px;height:52px;">
+                <i class="bi bi-sliders fs-3"></i>
             </div>
-            <h6 class="font-bold text-dark mb-1">Django Admin Panel</h6>
+            <h6 class="fw-bold text-dark mb-1">Django Admin Panel</h6>
             <p class="small text-muted mb-3">Access built-in Django database administration.</p>
-            <a href="/admin/" target="_blank" class="btn btn-outline-secondary btn-sm px-4 fw-semibold">
+            <a href="/admin/" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm px-4 fw-semibold">
                 Open Admin Site
             </a>
         </div>
     </div>
+
 </div>
 {% endblock %}

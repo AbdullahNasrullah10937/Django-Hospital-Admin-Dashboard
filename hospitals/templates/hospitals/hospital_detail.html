@@ -6,7 +6,7 @@
 <!-- Breadcrumb -->
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'hospital_list' %}" class="text-decoration-none"><i class="bi bi-hospital me-1"></i>Hospitals</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'hospital_list' %}"><i class="bi bi-hospital me-1"></i>Hospitals</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ hospital.hospital_name }}</li>
     </ol>
 </nav>
@@ -23,7 +23,7 @@
                             <i class="bi bi-hospital fs-1"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-dark mb-1">{{ hospital.hospital_name }}</h3>
+                            <h3 class="fw-bold text-dark mb-1">{{ hospital.hospital_name }}</h3>
                             <p class="text-muted mb-0"><i class="bi bi-geo-alt-fill text-danger me-1"></i>{{ hospital.location }}</p>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                 <div class="row g-3 text-center text-sm-start">
                     <div class="col-6 col-sm-4">
                         <span class="text-uppercase text-muted small fw-semibold">Founded Year</span>
-                        <h5 class="font-bold text-dark mt-1">{{ hospital.founded_year }}</h5>
+                        <h5 class="fw-bold text-dark mt-1">{{ hospital.founded_year }}</h5>
                     </div>
                     <div class="col-6 col-sm-4">
                         <span class="text-uppercase text-muted small fw-semibold">Status</span>
@@ -48,7 +48,7 @@
                     </div>
                     <div class="col-12 col-sm-4">
                         <span class="text-uppercase text-muted small fw-semibold">Total Wards</span>
-                        <h5 class="font-bold text-dark mt-1">{{ hospital.wards.count }} Wards</h5>
+                        <h5 class="fw-bold text-dark mt-1">{{ hospital.wards.count }} Wards</h5>
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
         <!-- Director Section -->
         <div class="card bp-card shadow-sm">
             <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center">
-                <h5 class="font-bold text-dark mb-0"><i class="bi bi-person-badge me-2 text-primary"></i>Medical Director</h5>
+                <h5 class="fw-bold text-dark mb-0"><i class="bi bi-person-badge me-2 text-primary"></i>Medical Director</h5>
                 {% if hospital.director %}
                     <a href="{% url 'director_detail' hospital.director.pk %}" class="btn btn-sm btn-outline-primary">View Profile</a>
                 {% endif %}
@@ -65,11 +65,12 @@
             <div class="card-body p-4">
                 {% if hospital.director %}
                     <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-circle bg-primary bg-opacity-10 text-primary font-bold d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem;">
+                        <div class="rounded-circle bg-primary bg-opacity-10 text-primary fw-bold d-flex align-items-center justify-content-center flex-shrink-0"
+                             style="width:54px;height:54px;font-size:1.5rem;">
                             {{ hospital.director.director_name|slice:":1" }}
                         </div>
                         <div>
-                            <h5 class="font-bold text-dark mb-1">{{ hospital.director.director_name }}</h5>
+                            <h5 class="fw-bold text-dark mb-1">{{ hospital.director.director_name }}</h5>
                             <p class="text-muted mb-1"><span class="badge bg-light text-dark border">{{ hospital.director.qualification }}</span></p>
                             <small class="text-muted">Director ID: #{{ hospital.director.director_id }}</small>
                         </div>
@@ -88,7 +89,7 @@
     <div class="col-12 col-lg-4">
         <div class="card bp-card shadow-sm h-100">
             <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center">
-                <h5 class="font-bold text-dark mb-0"><i class="bi bi-door-open me-2 text-success"></i>Wards List</h5>
+                <h5 class="fw-bold text-dark mb-0"><i class="bi bi-door-open me-2 text-success"></i>Wards List</h5>
                 <a href="{% url 'ward_create' %}" class="btn btn-sm btn-outline-success">+ Add Ward</a>
             </div>
             <div class="card-body p-0">
@@ -97,7 +98,7 @@
                         {% for ward in hospital.wards.all %}
                             <a href="{% url 'ward_detail' ward.pk %}" class="list-group-item list-group-item-action p-3 d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="mb-0 font-bold text-dark">{{ ward.ward_name }}</h6>
+                                    <h6 class="mb-0 fw-bold text-dark">{{ ward.ward_name }}</h6>
                                 </div>
                                 <span class="badge bg-light text-dark border">{{ ward.capacity }} Beds</span>
                             </a>

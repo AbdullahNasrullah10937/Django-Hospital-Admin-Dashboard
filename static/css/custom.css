@@ -1,126 +1,185 @@
-/* BP Hospitals - Custom Bootstrap 5 Brand Styling */
+/* =====================================================
+   BP Hospitals – Custom Bootstrap 5 Brand Theme
+   All classes here extend / override Bootstrap 5.
+   No Tailwind classes used anywhere.
+   ===================================================== */
 
+/* ── Design Tokens ─────────────────────────────────── */
 :root {
-    --bp-primary: #005698;
-    --bp-primary-dark: #003e6f;
-    --bp-primary-light: #e8f1f8;
-    --bp-secondary: #006a69;
-    --bp-accent: #0f6fbe;
-    --bp-bg: #f8fafc;
-    --bp-dark-sidebar: #1e293b;
-    --bp-text: #0f172a;
-    --bp-muted: #64748b;
+    --bp-primary:      #005698;
+    --bp-primary-dk:   #003e6f;
+    --bp-primary-lt:   #e8f1f8;
+    --bp-secondary:    #006a69;
+    --bp-accent:       #0f6fbe;
+    --bp-sidebar-bg:   #1e293b;
+    --bp-bg:           #f0f4f8;
+    --bp-surface:      #ffffff;
+    --bp-border:       #e2e8f0;
+    --bp-text:         #0f172a;
+    --bp-muted:        #64748b;
+    --sidebar-width:   260px;
+    --header-height:   64px;
 }
 
+/* ── Global Body ────────────────────────────────────── */
 body {
     background-color: var(--bp-bg);
     color: var(--bp-text);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 0.9375rem;
 }
 
-/* Header Navbar */
+/* ── Top Header ─────────────────────────────────────── */
 .bp-header {
-    height: 64px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
+    height: var(--header-height);
+    background-color: var(--bp-surface);
+    border-bottom: 1px solid var(--bp-border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    /* z-index must be higher than sidebar (z-3 = 1003 in BS5) */
+    z-index: 1040 !important;
 }
 
-/* Offcanvas Sidebar */
+/* ── Sidebar (shared desktop + offcanvas-mobile) ────── */
 .bp-sidebar {
-    width: 260px;
-    background-color: var(--bp-dark-sidebar);
+    width: var(--sidebar-width) !important;
+    background-color: var(--bp-sidebar-bg);
     color: #f8fafc;
 }
 
+/* Desktop: fixed left panel below header */
+@media (min-width: 768px) {
+    .bp-sidebar {
+        position: fixed !important;
+        top: var(--header-height);   /* sit below header */
+        left: 0;
+        bottom: 0;
+        /* Ensure it does NOT overlap header */
+        z-index: 1030;
+        overflow-y: auto;
+    }
+}
+
+/* Mobile: reset positioning (offcanvas handles it) */
+@media (max-width: 767.98px) {
+    .bp-sidebar {
+        top: 0 !important;   /* full height on mobile offcanvas */
+    }
+}
+
+/* Sidebar nav pills */
 .bp-sidebar .nav-link {
     color: #94a3b8;
     font-weight: 500;
     border-radius: 0.5rem;
     padding: 0.75rem 1rem;
-    transition: all 0.2s ease-in-out;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 }
 
-.bp-sidebar .nav-link:hover,
+.bp-sidebar .nav-link i {
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.bp-sidebar .nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255,255,255,0.08);
+}
+
 .bp-sidebar .nav-link.active {
     color: #ffffff;
     background-color: var(--bp-primary);
 }
 
-.bp-sidebar .nav-link i {
-    font-size: 1.2rem;
-}
-
-/* Main Content Area */
+/* ── Main Content Area ──────────────────────────────── */
+/* Desktop: indented right of sidebar + below header */
 @media (min-width: 768px) {
     .bp-main-content {
-        margin-left: 260px;
-        padding-top: 64px;
+        margin-left: var(--sidebar-width);
+        padding-top: var(--header-height);
+        min-height: 100vh;
     }
 }
+
+/* Mobile: full width, just push below header */
 @media (max-width: 767.98px) {
     .bp-main-content {
         margin-left: 0;
-        padding-top: 64px;
+        padding-top: var(--header-height);
+        min-height: 100vh;
     }
 }
 
-/* Cards & Bento Grid */
+/* ── Cards ──────────────────────────────────────────── */
 .bp-card {
-    border: 1px solid #e2e8f0;
+    background-color: var(--bp-surface);
+    border: 1px solid var(--bp-border);
     border-radius: 0.75rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    background-color: #ffffff;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s ease;
 }
 
 .bp-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
 }
 
-/* Badges & Accents */
-.badge-bp-primary {
-    background-color: var(--bp-primary-light);
-    color: var(--bp-primary);
-    font-weight: 600;
-}
-
-/* Custom Table Responsive Wrapper */
-.table-responsive {
-    border-radius: 0.5rem;
-}
-
+/* ── Tables ─────────────────────────────────────────── */
 .table th {
     background-color: #f1f5f9;
     color: #475569;
-    font-size: 0.8125rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     font-weight: 600;
+    white-space: nowrap;
 }
 
-/* Dropdown Menu Customization */
+.table-responsive {
+    border-radius: 0.5rem;
+    overflow: hidden;          /* clip the rounded corners */
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.btn-primary {
+    background-color: var(--bp-primary);
+    border-color: var(--bp-primary);
+}
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--bp-primary-dk);
+    border-color: var(--bp-primary-dk);
+}
+.btn-outline-primary {
+    color: var(--bp-primary);
+    border-color: var(--bp-primary);
+}
+.btn-outline-primary:hover {
+    background-color: var(--bp-primary);
+    border-color: var(--bp-primary);
+    color: #fff;
+}
+
+/* ── Dropdown Menus ──────────────────────────────────── */
 .dropdown-menu {
     border-radius: 0.75rem;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--bp-border);
+    box-shadow: 0 8px 24px -4px rgba(0,0,0,0.12);
 }
 
 .dropdown-item {
-    padding: 0.6rem 1rem;
+    padding: 0.55rem 1rem;
     font-size: 0.9rem;
     color: #334155;
 }
 
-.dropdown-item:hover {
-    background-color: var(--bp-primary-light);
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--bp-primary-lt);
     color: var(--bp-primary);
 }
 
-/* Form Validation Styling */
+/* ── Form Validation States ──────────────────────────── */
 .form-control.is-invalid,
 .form-select.is-invalid {
     border-color: #dc3545;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5zM6 8.2a.6.6 0 1 0 0-1.2.6.6 0 0 0 0 1.2z'/%3e%3c/svg%3e");
 }
 
 .form-control.is-valid,
@@ -129,12 +188,37 @@ body {
 }
 
 .invalid-feedback {
-    font-size: 0.85rem;
+    font-size: 0.83rem;
     font-weight: 500;
 }
 
-/* Numeric input styling */
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
+/* Keep number input spinners visible */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
     opacity: 1;
+}
+
+/* ── Alert / Flash Messages ──────────────────────────── */
+.alert {
+    border-radius: 0.625rem;
+}
+
+/* ── Pagination ──────────────────────────────────────── */
+.page-link {
+    color: var(--bp-primary);
+}
+
+.page-item.active .page-link {
+    background-color: var(--bp-primary);
+    border-color: var(--bp-primary);
+}
+
+/* ── Breadcrumb ──────────────────────────────────────── */
+.breadcrumb-item a {
+    color: var(--bp-primary);
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    text-decoration: underline;
 }
