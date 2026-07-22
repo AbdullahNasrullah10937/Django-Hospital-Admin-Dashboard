@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Wards - BP Hospitals Admin{% endblock %}
+
+{% block search_action %}{% url 'ward_list' %}{% endblock %}
+
+{% block content %}
+<div class="max-w-[1400px] mx-auto w-full">
+    <!-- Page Header & Actions -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-md mb-lg">
+        <div>
+            <h2 class="font-display-lg text-display-lg text-on-surface font-bold">Wards</h2>
+            <p class="text-on-surface-variant font-body-lg mt-xs">Manage hospital wards and bed capacity tracking.</p>
+        </div>
+        <div class="flex items-center gap-sm">
+            <a href="{% url 'ward_create' %}" class="flex items-center gap-2 px-5 py-2.5 bg-primary-container text-on-primary-container font-title-md text-title-md rounded-lg hover:bg-primary-container/90 transition-colors shadow-sm font-semibold">
+                <span class="material-symbols-outlined text-[20px]">add</span> Add Ward
+            </a>
+        </div>
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="bg-surface-container-lowest rounded-lg border border-outline-variant/30 shadow-sm overflow-hidden flex flex-col">
+        <!-- Table Header Tools -->
+        <div class="p-lg border-b border-outline-variant/30 flex flex-col sm:flex-row sm:items-center justify-between gap-md bg-surface-bright">
+            <h3 class="font-title-md text-title-md text-on-surface font-bold">Ward Directory</h3>
+            <form action="{% url 'ward_list' %}" method="get" class="flex items-center gap-sm w-full sm:w-auto">
+                <div class="relative flex-1 sm:w-72">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant text-[20px]">search</span>
+                    <input type="text" name="q" value="{{ search_query }}" placeholder="Search by name or hospital..." class="w-full pl-9 pr-3 py-1.5 bg-surface-container-low border border-outline-variant/50 rounded-md text-body-md focus:ring-2 focus:ring-primary/50 outline-none"/>
+                </div>
+                <button type="submit" class="px-4 py-1.5 bg-primary text-on-primary rounded-md font-semibold text-sm">
+                    Search
+                </button>
+                {% if search_query %}
+                    <a href="{% url 'ward_list' %}" class="px-3 py-1.5 border border-outline-variant rounded-md text-on-surface-variant text-sm font-semibold">Clear</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-[#F1F5F9] border-b border-[#E2E8F0]">
+                        <th class="py-3 px-lg font-label-md text-label-md text-on-surface-variant font-semibold whitespace-nowrap">ID</th>
+                        <th class="py-3 px-lg font-label-md text-label-md text-on-surface-variant font-semibold whitespace-nowrap">Ward Name</th>
+                        <th class="py-3 px-lg font-label-md text-label-md text-on-surface-variant font-semibold whitespace-nowrap">Hospital Facility</th>
+                        <th class="py-3 px-lg font-label-md text-label-md text-on-surface-variant font-semibold whitespace-nowrap text-right">Capacity</th>
+                        <th class="py-3 px-lg font-label-md text-label-md text-on-surface-variant font-semibold whitespace-nowrap text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="font-body-md text-on-surface divide-y divide-[#E2E8F0]">
+                    {% if wards %}
+                        {% for ward in wards %}
+                            <tr class="hover:bg-surface-container-low/50 transition-colors h-[52px]">
+                                <td class="py-3 px-lg font-semibold text-outline">#{{ ward.ward_id }}</td>
+                                <td class="py-3 px-lg whitespace-nowrap">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                                            <span class="material-symbols-outlined text-[18px]">meeting_room</span>
+                                        </div>
+                                        <div>
+                                            <a href="{% url 'ward_detail' ward.pk %}" class="font-title-md text-title-md font-bold hover:text-primary transition-colors">
+                                                {{ ward.ward_name }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-lg whitespace-nowrap">
+                                    <a href="{% url 'hospital_detail' ward.hospital.pk %}" class="font-semibold text-primary hover:underline">
+                                        {{ ward.hospital.hospital_name }}
+                                    </a>
+                                </td>
+                                <td class="py-3 px-lg whitespace-nowrap text-right font-bold text-on-surface">
+                                    {{ ward.capacity }} Beds
+                                </td>
+                                <td class="py-3 px-lg whitespace-nowrap text-center">
+                                    <div class="flex items-center justify-center gap-1">
+                                        <a href="{% url 'ward_detail' ward.pk %}" class="p-1.5 text-outline-variant hover:text-primary hover:bg-primary/10 rounded-md transition-colors" title="View Details">
+                                            <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                        </a>
+                                        <a href="{% url 'ward_update' ward.pk %}" class="p-1.5 text-outline-variant hover:text-secondary hover:bg-secondary/10 rounded-md transition-colors" title="Edit">
+                                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                                        </a>
+                                        <a href="{% url 'ward_delete' ward.pk %}" class="p-1.5 text-outline-variant hover:text-error hover:bg-error-container rounded-md transition-colors" title="Delete">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="py-8 px-lg text-center text-on-surface-variant font-medium">
+                                No wards found matching your criteria.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+            <div class="p-4 border-t border-outline-variant/30 bg-surface-bright flex items-center justify-between">
+                <p class="font-body-md text-on-surface-variant text-sm">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </p>
+                <div class="flex items-center gap-1">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-high font-medium text-sm">Prev</a>
+                    {% else %}
+                        <button class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant opacity-50 cursor-not-allowed text-sm" disabled>Prev</button>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <span class="w-8 h-8 flex items-center justify-center rounded-md bg-primary-container text-on-primary-container font-bold text-sm">{{ num }}</span>
+                        {% else %}
+                            <a href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}" class="w-8 h-8 flex items-center justify-center rounded-md text-on-surface-variant hover:bg-surface-container-high font-medium text-sm transition-colors">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-high font-medium text-sm">Next</a>
+                    {% else %}
+                        <button class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant opacity-50 cursor-not-allowed text-sm" disabled>Next</button>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ director.director_name }} - BP Hospitals Admin{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb & Back -->
+<div class="mb-lg flex items-center text-outline text-body-md">
+    <a href="{% url 'director_list' %}" class="hover:text-primary transition-colors flex items-center gap-1 font-semibold">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span> Directors
+    </a>
+    <span class="mx-2">/</span>
+    <span class="text-on-surface font-semibold">{{ director.director_name }}</span>
+</div>
+
+<div class="max-w-4xl mx-auto w-full">
+    <div class="bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/30 p-lg relative overflow-hidden">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-b border-outline-variant/30 pb-6 mb-6">
+            <div class="flex items-center gap-4">
+                <div class="w-20 h-20 rounded-full bg-primary-container/20 text-primary font-bold text-3xl flex items-center justify-center border-2 border-surface-container-low shrink-0">
+                    {{ director.director_name|slice:":1" }}
+                </div>
+                <div>
+                    <h2 class="font-display-md text-display-md text-on-surface font-bold">{{ director.director_name }}</h2>
+                    <p class="font-title-md text-title-md text-on-surface-variant font-medium mt-0.5">{{ director.qualification }}</p>
+                </div>
+            </div>
+
+            <div class="flex gap-2 shrink-0">
+                <a href="{% url 'director_update' director.pk %}" class="flex items-center gap-2 px-4 py-2 text-primary border border-primary rounded hover:bg-surface-container-low transition-colors font-semibold">
+                    <span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                </a>
+                <a href="{% url 'director_delete' director.pk %}" class="flex items-center gap-2 px-4 py-2 text-error border border-error rounded hover:bg-error-container transition-colors font-semibold">
+                    <span class="material-symbols-outlined text-[18px]">delete</span> Delete
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-surface-container-low rounded-lg p-md border border-outline-variant/30">
+                <p class="font-label-md text-label-md text-outline uppercase tracking-wider font-semibold mb-1">Assigned Hospital Facility</p>
+                <a href="{% url 'hospital_detail' director.hospital.pk %}" class="font-body-lg text-body-lg text-primary font-bold hover:underline flex items-center gap-2 mt-1">
+                    <span class="material-symbols-outlined">local_hospital</span> {{ director.hospital.hospital_name }}
+                </a>
+                <p class="text-xs text-on-surface-variant mt-2">Location: {{ director.hospital.location }}</p>
+            </div>
+
+            <div class="bg-surface-container-low rounded-lg p-md border border-outline-variant/30">
+                <p class="font-label-md text-label-md text-outline uppercase tracking-wider font-semibold mb-1">Director Profile Metadata</p>
+                <p class="font-body-md text-body-md text-on-surface font-medium mt-1">Director Record ID: #{{ director.director_id }}</p>
+                <p class="text-xs text-on-surface-variant mt-2">Relationship: 1-to-1 Mandatory Hospital Executive</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

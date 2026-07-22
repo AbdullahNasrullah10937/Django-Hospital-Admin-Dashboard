@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Directors - BP Hospitals Admin{% endblock %}
+
+{% block search_action %}{% url 'director_list' %}{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between">
+    <div>
+        <h2 class="font-display-lg text-display-lg text-on-background font-bold tracking-tight">Directors</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-1">Manage and assign medical directors across the BP Hospital network.</p>
+    </div>
+    <a href="{% url 'director_create' %}" class="bg-primary-container text-surface-container-lowest font-title-md text-title-md px-6 py-2.5 rounded-lg flex items-center gap-2 hover:bg-primary transition-colors shadow-sm font-semibold">
+        <span class="material-symbols-outlined text-[20px]">add</span> Add Director
+    </a>
+</div>
+
+<div class="bg-surface-container-lowest rounded-lg p-lg shadow-sm border border-outline-variant/30 flex flex-col flex-1">
+    <div class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+        <form action="{% url 'director_list' %}" method="get" class="flex items-center gap-3 w-full">
+            <div class="relative flex-1">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Search by name or qualification..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-outline-variant bg-surface font-body-md text-body-md text-on-surface focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-outline outline-none"/>
+            </div>
+            <button type="submit" class="px-5 py-2 bg-primary text-on-primary rounded-lg font-semibold hover:bg-surface-tint transition-colors">
+                Search
+            </button>
+            {% if search_query %}
+                <a href="{% url 'director_list' %}" class="px-4 py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-container-high font-semibold">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="w-full overflow-x-auto flex-1">
+        <table class="w-full text-left border-collapse min-w-[700px]">
+            <thead>
+                <tr class="bg-surface-container-low border-b border-outline-variant h-[48px]">
+                    <th class="px-4 font-label-md text-label-md text-on-surface-variant font-semibold tracking-wider">ID</th>
+                    <th class="px-4 font-label-md text-label-md text-on-surface-variant font-semibold tracking-wider">Director Name</th>
+                    <th class="px-4 font-label-md text-label-md text-on-surface-variant font-semibold tracking-wider">Qualification</th>
+                    <th class="px-4 font-label-md text-label-md text-on-surface-variant font-semibold tracking-wider">Assigned Hospital</th>
+                    <th class="px-4 font-label-md text-label-md text-on-surface-variant font-semibold tracking-wider text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="font-body-md text-body-md text-on-background divide-y divide-outline-variant/30">
+                {% if directors %}
+                    {% for director in directors %}
+                        <tr class="h-[52px] hover:bg-surface-container-low/50 transition-colors">
+                            <td class="px-4 font-semibold text-outline">#{{ director.director_id }}</td>
+                            <td class="px-4 py-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-primary-container/20 text-primary font-bold flex items-center justify-center shrink-0">
+                                        {{ director.director_name|slice:":1" }}
+                                    </div>
+                                    <a href="{% url 'director_detail' director.pk %}" class="font-title-md text-title-md font-bold hover:text-primary transition-colors">
+                                        {{ director.director_name }}
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="px-4 text-on-surface-variant font-medium">{{ director.qualification }}</td>
+                            <td class="px-4">
+                                <a href="{% url 'hospital_detail' director.hospital.pk %}" class="font-semibold text-primary hover:underline">
+                                    {{ director.hospital.hospital_name }}
+                                </a>
+                            </td>
+                            <td class="px-4 text-right">
+                                <div class="flex items-center justify-end gap-1">
+                                    <a href="{% url 'director_detail' director.pk %}" class="p-1.5 text-outline-variant hover:text-primary transition-colors rounded hover:bg-surface-container-high" title="View">
+                                        <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                    </a>
+                                    <a href="{% url 'director_update' director.pk %}" class="p-1.5 text-outline-variant hover:text-secondary transition-colors rounded hover:bg-surface-container-high" title="Edit">
+                                        <span class="material-symbols-outlined text-[20px]">edit</span>
+                                    </a>
+                                    <a href="{% url 'director_delete' director.pk %}" class="p-1.5 text-outline-variant hover:text-error transition-colors rounded hover:bg-error-container" title="Delete">
+                                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="px-4 py-8 text-center text-on-surface-variant font-medium">
+                            No directors found matching your criteria.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <div class="flex items-center justify-between mt-6 pt-4 border-t border-outline-variant/30">
+            <p class="font-body-md text-body-md text-on-surface-variant">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+            <div class="flex items-center gap-1">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors">Prev</a>
+                {% else %}
+                    <button class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant opacity-50 cursor-not-allowed" disabled>Prev</button>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="w-8 h-8 flex items-center justify-center rounded bg-primary-container text-surface-container-lowest font-semibold shadow-sm">{{ num }}</span>
+                    {% else %}
+                        <a href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}" class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container-high font-semibold transition-colors">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors">Next</a>
+                {% else %}
+                    <button class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant opacity-50 cursor-not-allowed" disabled>Next</button>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Hospitals - BP Hospitals Admin{% endblock %}
+
+{% block search_action %}{% url 'hospital_list' %}{% endblock %}
+
+{% block content %}
+<!-- Content Header -->
+<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-surface-container-lowest p-lg rounded-lg shadow-sm border border-outline-variant/30 gap-4">
+    <div>
+        <h2 class="font-display-lg text-display-lg text-on-background font-bold">Hospitals</h2>
+        <p class="font-body-md text-outline mt-1">Manage and monitor hospital facilities across the network.</p>
+    </div>
+    <a href="{% url 'hospital_create' %}" class="bg-primary-container text-on-primary-container font-title-md px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-primary hover:text-on-primary transition-colors font-semibold shadow-sm shrink-0">
+        <span class="material-symbols-outlined text-sm">add</span> Add Hospital
+    </a>
+</div>
+
+<!-- Search and Filters -->
+<div class="bg-surface-container-lowest p-lg rounded-lg shadow-sm border border-outline-variant/30">
+    <form action="{% url 'hospital_list' %}" method="get" class="flex gap-4">
+        <div class="relative flex-grow">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+            <input type="text" name="q" value="{{ search_query }}" placeholder="Search hospitals by name or location..." class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-md font-body-md focus:outline-none focus:ring-2 focus:ring-primary/50 text-on-surface"/>
+        </div>
+        <button type="submit" class="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded-md font-title-md text-title-md font-semibold hover:bg-surface-tint transition-colors">
+            <span class="material-symbols-outlined text-sm">filter_list</span> Search
+        </button>
+        {% if search_query %}
+            <a href="{% url 'hospital_list' %}" class="flex items-center px-4 py-2 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-high font-semibold">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Data Table Card -->
+<div class="bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/30 overflow-hidden flex-grow flex flex-col">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-[#F1F5F9] font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+                <tr>
+                    <th class="px-6 py-4 font-semibold border-b border-outline-variant/50">ID</th>
+                    <th class="px-6 py-4 font-semibold border-b border-outline-variant/50">Hospital Name</th>
+                    <th class="px-6 py-4 font-semibold border-b border-outline-variant/50">Location</th>
+                    <th class="px-6 py-4 font-semibold border-b border-outline-variant/50">Founded Year</th>
+                    <th class="px-6 py-4 font-semibold border-b border-outline-variant/50 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="font-body-md text-on-surface divide-y divide-outline-variant/30">
+                {% if hospitals %}
+                    {% for hospital in hospitals %}
+                        <tr class="hover:bg-surface-container-low/50 transition-colors h-[52px]">
+                            <td class="px-6 py-3 font-semibold text-outline">{{ hospital.hospital_id }}</td>
+                            <td class="px-6 py-3 font-bold text-on-surface">
+                                <a href="{% url 'hospital_detail' hospital.pk %}" class="hover:text-primary transition-colors">
+                                    {{ hospital.hospital_name }}
+                                </a>
+                            </td>
+                            <td class="px-6 py-3 text-outline">{{ hospital.location }}</td>
+                            <td class="px-6 py-3 font-medium">{{ hospital.founded_year }}</td>
+                            <td class="px-6 py-3 text-right">
+                                <div class="flex items-center justify-end gap-2 text-outline">
+                                    <a href="{% url 'hospital_detail' hospital.pk %}" class="p-1.5 hover:text-primary transition-colors rounded hover:bg-surface-container-high" title="View">
+                                        <span class="material-symbols-outlined text-sm">visibility</span>
+                                    </a>
+                                    <a href="{% url 'hospital_update' hospital.pk %}" class="p-1.5 hover:text-secondary transition-colors rounded hover:bg-surface-container-high" title="Edit">
+                                        <span class="material-symbols-outlined text-sm">edit</span>
+                                    </a>
+                                    <a href="{% url 'hospital_delete' hospital.pk %}" class="p-1.5 hover:text-error transition-colors rounded hover:bg-error-container" title="Delete">
+                                        <span class="material-symbols-outlined text-sm">delete</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-on-surface-variant font-medium">
+                            No hospitals found matching your criteria.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <div class="mt-auto px-6 py-4 bg-surface-container-lowest border-t border-outline-variant/30 flex items-center justify-between">
+            <span class="font-caption text-caption text-outline">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            <div class="flex items-center gap-1">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors">Prev</a>
+                {% else %}
+                    <button class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant opacity-50 cursor-not-allowed" disabled>Prev</button>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="px-3 py-1 bg-primary text-on-primary rounded-md font-semibold">{{ num }}</span>
+                    {% else %}
+                        <a href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors">Next</a>
+                {% else %}
+                    <button class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant opacity-50 cursor-not-allowed" disabled>Next</button>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

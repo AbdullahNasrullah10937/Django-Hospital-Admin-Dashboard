@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ hospital.hospital_name }} - BP Hospitals Admin{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb & Back -->
+<div class="mb-lg flex items-center text-outline text-body-md">
+    <a href="{% url 'hospital_list' %}" class="hover:text-primary transition-colors flex items-center gap-1 font-semibold">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span> Hospitals
+    </a>
+    <span class="mx-2">/</span>
+    <span class="text-on-surface font-semibold">{{ hospital.hospital_name }}</span>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+    <!-- Left Column: Main Info & Director (8 cols) -->
+    <div class="lg:col-span-8 flex flex-col gap-lg">
+        <!-- Main Hospital Card -->
+        <div class="bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/30 p-lg relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary-container opacity-10 rounded-bl-full -z-10 pointer-events-none"></div>
+            
+            <!-- Actions -->
+            <div class="absolute top-lg right-lg flex gap-sm z-10">
+                <a href="{% url 'hospital_update' hospital.pk %}" class="flex items-center gap-2 px-3 py-2 text-primary border border-primary rounded hover:bg-surface-container-low transition-colors font-label-md text-label-md font-bold">
+                    <span class="material-symbols-outlined text-[16px]">edit</span> Edit
+                </a>
+                <a href="{% url 'hospital_delete' hospital.pk %}" class="flex items-center gap-2 px-3 py-2 text-error border border-error rounded hover:bg-error-container transition-colors font-label-md text-label-md font-bold">
+                    <span class="material-symbols-outlined text-[16px]">delete</span> Delete
+                </a>
+            </div>
+
+            <div class="flex gap-lg items-start flex-col md:flex-row">
+                <!-- Icon/Badge Container -->
+                <div class="w-full md:w-40 h-40 rounded-lg overflow-hidden bg-primary-container/10 border border-outline-variant/50 flex-shrink-0 flex items-center justify-center text-primary relative">
+                    <span class="material-symbols-outlined text-6xl filled">local_hospital</span>
+                    <div class="absolute bottom-2 right-2 bg-surface/90 px-2 py-1 rounded text-caption font-caption text-on-surface shadow-sm flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">location_on</span> {{ hospital.location }}
+                    </div>
+                </div>
+
+                <div class="flex-1 pt-2">
+                    <h2 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-xs pr-32">{{ hospital.hospital_name }}</h2>
+                    <p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1 mb-md">
+                        <span class="material-symbols-outlined text-[16px]">business</span> General Hospital Facility
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-md mt-lg border-t border-outline-variant/30 pt-lg">
+                        <div>
+                            <p class="font-label-md text-label-md text-outline mb-1 uppercase tracking-wider font-semibold">Location</p>
+                            <p class="font-body-md text-body-md text-on-surface font-medium">{{ hospital.location }}</p>
+                        </div>
+                        <div>
+                            <p class="font-label-md text-label-md text-outline mb-1 uppercase tracking-wider font-semibold">Founded Year</p>
+                            <p class="font-body-md text-body-md text-on-surface font-medium">{{ hospital.founded_year }}</p>
+                        </div>
+                        <div>
+                            <p class="font-label-md text-label-md text-outline mb-1 uppercase tracking-wider font-semibold">Status</p>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-caption font-medium">
+                                Active Facility
+                            </span>
+                        </div>
+                        <div>
+                            <p class="font-label-md text-label-md text-outline mb-1 uppercase tracking-wider font-semibold">Total Wards</p>
+                            <p class="font-body-md text-body-md text-on-surface font-medium">{{ hospital.wards.count }} Wards</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Director Section -->
+        <div class="bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/30 p-lg">
+            <h3 class="font-title-md text-title-md text-on-surface mb-lg font-bold flex items-center justify-between">
+                <span class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">person</span> Hospital Medical Director
+                </span>
+                {% if hospital.director %}
+                    <a href="{% url 'director_detail' hospital.director.pk %}" class="text-xs text-primary hover:underline">View Profile</a>
+                {% endif %}
+            </h3>
+
+            {% if hospital.director %}
+                <div class="flex items-center gap-md">
+                    <div class="w-16 h-16 rounded-full bg-primary-container/20 border-2 border-surface-container-low flex items-center justify-center text-primary font-bold text-xl shrink-0">
+                        {{ hospital.director.director_name|slice:":1" }}
+                    </div>
+                    <div>
+                        <h4 class="font-body-lg text-body-lg text-on-surface font-semibold">{{ hospital.director.director_name }}</h4>
+                        <p class="font-body-md text-body-md text-on-surface-variant mb-1 font-medium">Qualification: {{ hospital.director.qualification }}</p>
+                        <div class="flex items-center gap-4 text-xs text-outline">
+                            <span>Director ID: #{{ hospital.director.director_id }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="p-6 text-center bg-surface-container-low rounded-lg">
+                    <p class="text-on-surface-variant mb-3">No medical director assigned to this hospital yet.</p>
+                    <a href="{% url 'director_create' %}" class="px-4 py-2 bg-primary text-on-primary rounded text-xs font-semibold hover:bg-surface-tint">Assign Director</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Right Column: Wards List (4 cols) -->
+    <div class="lg:col-span-4">
+        <div class="bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col h-full">
+            <div class="p-lg border-b border-outline-variant/30 flex justify-between items-center bg-surface-bright">
+                <h3 class="font-title-md text-title-md text-on-surface font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-secondary">meeting_room</span> Wards List
+                </h3>
+                <a href="{% url 'ward_create' %}" class="text-primary hover:text-surface-tint transition-colors text-caption font-semibold">+ Add Ward</a>
+            </div>
+            <div class="overflow-x-auto flex-1">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low border-b border-outline-variant/30">
+                            <th class="font-label-md text-label-md text-on-surface-variant py-2 px-lg uppercase tracking-wider font-semibold">Ward Name</th>
+                            <th class="font-label-md text-label-md text-on-surface-variant py-2 px-lg uppercase tracking-wider font-semibold text-right">Capacity</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant/30">
+                        {% if hospital.wards.all %}
+                            {% for ward in hospital.wards.all %}
+                                <tr class="hover:bg-surface-bright transition-colors h-[48px]">
+                                    <td class="py-2 px-lg font-body-md text-on-surface font-medium">
+                                        <a href="{% url 'ward_detail' ward.pk %}" class="hover:text-primary transition-colors">
+                                            {{ ward.ward_name }}
+                                        </a>
+                                    </td>
+                                    <td class="py-2 px-lg font-body-md text-on-surface-variant text-right font-semibold">{{ ward.capacity }} Beds</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="2" class="py-6 px-lg text-center text-on-surface-variant text-xs">
+                                    No wards configured for this hospital.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

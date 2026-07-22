@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if is_edit %}Edit Ward - {{ form.instance.ward_name }}{% else %}Add New Ward{% endif %} - BP Hospitals Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto w-full">
+    <!-- Header -->
+    <div class="mb-6 flex items-center gap-4">
+        <a href="{% url 'ward_list' %}" class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <div>
+            <h2 class="font-display-md text-display-md text-on-surface font-bold">
+                {% if is_edit %}Edit Ward Details{% else %}Add New Ward{% endif %}
+            </h2>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">Configure ward parameters and hospital assignment.</p>
+        </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-surface-container-lowest rounded-lg p-lg shadow-sm border border-outline-variant/30">
+        <form method="post" class="space-y-6" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="p-4 bg-error-container text-on-error-container rounded-md font-medium text-sm">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+                <!-- Ward Name -->
+                <div class="space-y-2">
+                    <label for="{{ form.ward_name.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface">
+                        Ward Name <span class="text-error">*</span>
+                    </label>
+                    {{ form.ward_name }}
+                    {% if form.ward_name.errors %}
+                        <p class="font-caption text-caption text-error flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">error</span>
+                            {{ form.ward_name.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Capacity -->
+                <div class="space-y-2">
+                    <label for="{{ form.capacity.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface">
+                        Capacity (Beds) <span class="text-error">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant">bed</span>
+                        {{ form.capacity }}
+                    </div>
+                    {% if form.capacity.errors %}
+                        <p class="font-caption text-caption text-error flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">error</span>
+                            {{ form.capacity.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Hospital Dropdown -->
+                <div class="space-y-2 md:col-span-2">
+                    <label for="{{ form.hospital.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface">
+                        Hospital Assignment <span class="text-error">*</span>
+                    </label>
+                    <div class="relative">
+                        {{ form.hospital }}
+                    </div>
+                    {% if form.hospital.errors %}
+                        <p class="font-caption text-caption text-error flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">error</span>
+                            {{ form.hospital.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center justify-end space-x-4 pt-6 border-t border-outline-variant/50 mt-8">
+                <a href="{% url 'ward_list' %}" class="px-6 py-2.5 rounded-lg font-title-md text-title-md font-medium text-primary hover:bg-primary/10 transition-colors">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-2.5 rounded-lg font-title-md text-title-md font-medium bg-primary text-on-primary hover:bg-surface-tint shadow-sm hover:shadow-md transition-all font-semibold">
+                    Save Ward Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

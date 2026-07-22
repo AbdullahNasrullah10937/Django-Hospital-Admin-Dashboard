@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if is_edit %}Edit Director - {{ form.instance.director_name }}{% else %}Add New Director{% endif %} - BP Hospitals Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto w-full">
+    <!-- Header -->
+    <div class="mb-6 flex items-center gap-4">
+        <a href="{% url 'director_list' %}" class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <div>
+            <h2 class="font-display-md text-display-md text-on-background font-bold">
+                {% if is_edit %}Edit Director Profile{% else %}Director Profile Creation{% endif %}
+            </h2>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">Manage executive credentials and hospital assignments.</p>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="bg-surface-container-lowest rounded-lg p-lg shadow-sm border border-outline-variant/30">
+        <form method="post" class="space-y-6" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="p-4 bg-error-container text-on-error-container rounded-md font-medium text-sm">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Basic Info Section -->
+            <div>
+                <h3 class="font-title-md text-title-md text-on-surface border-b border-outline-variant pb-2 mb-4 font-bold">Personal Details</h3>
+                <div>
+                    <label for="{{ form.director_name.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface mb-1">
+                        Director Name <span class="text-error">*</span>
+                    </label>
+                    {{ form.director_name }}
+                    {% if form.director_name.errors %}
+                        <p class="mt-1 font-caption text-caption text-error flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">error</span>
+                            {{ form.director_name.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Professional Info Section -->
+            <div>
+                <h3 class="font-title-md text-title-md text-on-surface border-b border-outline-variant pb-2 mb-4 font-bold">Professional Information</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label for="{{ form.qualification.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface mb-1">
+                            Qualification <span class="text-error">*</span>
+                        </label>
+                        {{ form.qualification }}
+                        <p class="mt-1 font-caption text-caption text-outline-variant">Enter primary medical or administrative degrees (e.g. MD, PhD, MHA).</p>
+                        {% if form.qualification.errors %}
+                            <p class="mt-1 font-caption text-caption text-error flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">error</span>
+                                {{ form.qualification.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.hospital.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface mb-1">
+                            Hospital Assignment <span class="text-error">*</span>
+                        </label>
+                        <div class="relative">
+                            {{ form.hospital }}
+                        </div>
+                        {% if form.hospital.errors %}
+                            <p class="mt-1 font-caption text-caption text-error flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">error</span>
+                                {{ form.hospital.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="mt-8 pt-6 border-t border-outline-variant flex items-center justify-end gap-4">
+                <a href="{% url 'director_list' %}" class="px-6 py-2.5 rounded font-label-md text-label-md font-bold text-on-surface-variant bg-transparent border border-outline hover:bg-surface-container-high transition-colors">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-2.5 rounded font-label-md text-label-md font-bold text-on-primary bg-primary-container hover:bg-surface-tint transition-colors shadow-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">save</span> Save Director Profile
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

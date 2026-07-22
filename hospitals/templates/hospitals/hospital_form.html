@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if is_edit %}Edit Hospital - {{ form.instance.hospital_name }}{% else %}Add New Hospital{% endif %} - BP Hospitals Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto w-full">
+    <!-- Page Header -->
+    <div class="mb-6 flex items-center gap-4">
+        <a href="{% url 'hospital_list' %}" class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <div>
+            <h2 class="font-display-md text-display-md text-on-surface font-bold">
+                {% if is_edit %}Edit Hospital Facility{% else %}Add New Hospital{% endif %}
+            </h2>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
+                {% if is_edit %}Update hospital parameters and details.{% else %}Register a new hospital facility in the BP network.{% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-surface-container-lowest rounded-lg p-lg shadow-sm border border-outline-variant/30">
+        <form method="post" class="space-y-6" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="p-4 bg-error-container text-on-error-container rounded-md font-medium text-sm">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Form Group: Hospital Name -->
+            <div>
+                <label for="{{ form.hospital_name.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface mb-2">
+                    Hospital Name <span class="text-error">*</span>
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+                        <span class="material-symbols-outlined text-[20px]">domain</span>
+                    </span>
+                    {{ form.hospital_name }}
+                </div>
+                {% if form.hospital_name.errors %}
+                    <p class="mt-2 font-caption text-caption text-error flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">error</span>
+                        {{ form.hospital_name.errors.0 }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Form Group: Location -->
+            <div>
+                <label for="{{ form.location.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface mb-2">
+                    Location <span class="text-error">*</span>
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+                        <span class="material-symbols-outlined text-[20px]">location_on</span>
+                    </span>
+                    {{ form.location }}
+                </div>
+                {% if form.location.errors %}
+                    <p class="mt-2 font-caption text-caption text-error flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">error</span>
+                        {{ form.location.errors.0 }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Form Group: Founded Year -->
+            <div>
+                <label for="{{ form.founded_year.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface mb-2">
+                    Founded Year <span class="text-error">*</span>
+                </label>
+                <div class="relative w-full sm:w-1/2">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+                        <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                    </span>
+                    {{ form.founded_year }}
+                </div>
+                {% if form.founded_year.errors %}
+                    <p class="mt-2 font-caption text-caption text-error flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">error</span>
+                        {{ form.founded_year.errors.0 }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Actions -->
+            <div class="pt-6 mt-6 border-t border-outline-variant flex justify-end gap-4">
+                <a href="{% url 'hospital_list' %}" class="px-6 py-2.5 rounded-md font-label-md text-label-md font-bold text-secondary border border-secondary hover:bg-secondary/10 transition-colors">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-2.5 rounded-md font-label-md text-label-md font-bold bg-primary-container text-on-primary-container shadow-sm hover:bg-primary hover:text-on-primary transition-colors">
+                    Save Hospital
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

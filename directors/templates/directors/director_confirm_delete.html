@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Director - {{ object.director_name }}{% endblock %}
+
+{% block content %}
+<div class="fixed inset-0 z-50 bg-on-background/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <main class="bg-surface-container-lowest rounded-xl shadow-xl w-full max-w-[480px] p-lg flex flex-col gap-lg border border-outline-variant/40">
+        <!-- Icon & Header -->
+        <div class="flex flex-col items-center text-center gap-sm mt-sm">
+            <div class="h-16 w-16 rounded-full bg-error-container flex items-center justify-center mb-sm">
+                <span class="material-symbols-outlined text-error text-3xl filled">warning</span>
+            </div>
+            <h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Delete Director Profile</h2>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-xs">
+                Are you sure you want to delete <span class="font-title-md text-title-md text-on-surface font-bold">{{ object.director_name }}</span>? This action cannot be undone.
+            </p>
+        </div>
+
+        <!-- Details Card -->
+        <div class="bg-surface-container-low rounded-lg p-md border border-outline-variant flex items-start gap-md">
+            <span class="material-symbols-outlined text-outline mt-xs">person</span>
+            <div class="flex flex-col">
+                <span class="font-label-md text-label-md text-on-surface-variant uppercase font-semibold">Director ID: #{{ object.director_id }}</span>
+                <span class="font-body-md text-body-md text-on-surface font-bold">{{ object.director_name }} ({{ object.qualification }})</span>
+                <span class="font-caption text-caption text-outline">Assigned to: {{ object.hospital.hospital_name }}</span>
+            </div>
+        </div>
+
+        <!-- Actions Form -->
+        <form method="post" class="flex items-center justify-end gap-sm mt-md pt-md border-t border-outline-variant">
+            {% csrf_token %}
+            <a href="{% url 'director_list' %}" class="px-5 py-2 rounded-lg font-title-md text-title-md border border-secondary text-secondary hover:bg-secondary/10 transition-colors font-semibold">
+                Cancel
+            </a>
+            <button type="submit" class="px-5 py-2 rounded-lg font-title-md text-title-md bg-error text-on-error hover:bg-error/90 transition-colors shadow-sm font-semibold flex items-center gap-xs">
+                <span class="material-symbols-outlined text-sm">delete</span> Confirm Delete
+            </button>
+        </form>
+    </main>
+</div>
+{% endblock %}

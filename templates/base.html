@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}BP Hospitals - Admin Console{% endblock %}</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Tailwind CSS with Design Token Config -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006a69",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#00706f",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#98f2f0",
+                        "inverse-primary": "#a1c9ff",
+                        "on-error-container": "#93000a",
+                        "primary-container": "#0f6fbe",
+                        "on-primary-fixed-variant": "#004880",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-container": "#e7eeff",
+                        "primary": "#005698",
+                        "surface-dim": "#cfdaf2",
+                        "tertiary-container": "#aa5600",
+                        "on-secondary-fixed": "#002020",
+                        "on-secondary-fixed-variant": "#00504f",
+                        "primary-fixed-dim": "#a1c9ff",
+                        "surface-container-high": "#dee8ff",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#d3e4ff",
+                        "outline": "#717782",
+                        "on-background": "#111c2d",
+                        "inverse-on-surface": "#ecf1ff",
+                        "surface-variant": "#d8e3fb",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#0060a8",
+                        "on-primary-fixed": "#001c38",
+                        "secondary-fixed-dim": "#7cd5d3",
+                        "tertiary-fixed": "#ffdcc6",
+                        "surface-bright": "#f9f9ff",
+                        "tertiary-fixed-dim": "#ffb784",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#ffece2",
+                        "inverse-surface": "#263143",
+                        "on-tertiary-fixed-variant": "#713700",
+                        "tertiary": "#864200",
+                        "on-surface": "#111c2d",
+                        "surface-container-low": "#f0f3ff",
+                        "background": "#f9f9ff",
+                        "secondary-container": "#98f2f0",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#e9f0ff",
+                        "on-surface-variant": "#414751",
+                        "outline-variant": "#c1c7d3",
+                        "surface": "#f9f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "base": "4px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "container-padding": "32px",
+                        "sidebar-width": "260px",
+                        "md": "16px",
+                        "header-height": "64px"
+                    },
+                    "fontFamily": {
+                        "sans": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"],
+                        "display-md": ["Inter", "sans-serif"],
+                        "headline-sm": ["Inter", "sans-serif"],
+                        "title-md": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "caption": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .card-shadow {
+            box-shadow: 0px 2px 4px rgba(30, 41, 59, 0.05);
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen">
+    
+    <!-- SideNavBar -->
+    <aside class="hidden md:flex bg-inverse-surface font-label-md text-label-md fixed left-0 top-0 h-full w-[260px] shadow-md flex-col py-lg z-50">
+        <!-- Sidebar Logo: transparent icon + white text, no container needed -->
+        <div class="px-lg mb-6 flex items-center gap-3">
+            <img src="{% static 'img/logo_icon.png' %}" alt="BP Hospitals" class="h-10 w-10 object-contain shrink-0" />
+            <div>
+                <h1 class="text-surface-container-lowest font-bold text-base leading-tight tracking-tight">Inter BP Hospitals</h1>
+                <p class="text-primary-fixed text-xs mt-0.5 leading-tight">Admin Management System</p>
+            </div>
+        </div>
+        
+        <nav class="flex-1 flex flex-col gap-2">
+            <!-- Dashboard -->
+            <a href="{% url 'dashboard' %}" class="flex items-center gap-4 px-4 py-3 mx-2 rounded-lg cursor-pointer transition-all active:scale-95 group {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'dashboard_alias' %}text-surface-container-lowest bg-primary font-bold shadow-sm{% else %}text-outline-variant hover:text-surface-container-lowest hover:bg-surface-variant/10{% endif %}">
+                <span class="material-symbols-outlined {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'dashboard_alias' %}filled{% endif %}">dashboard</span>
+                <span>Dashboard</span>
+            </a>
+
+            <!-- Hospitals -->
+            <a href="{% url 'hospital_list' %}" class="flex items-center gap-4 px-4 py-3 mx-2 rounded-lg cursor-pointer transition-all active:scale-95 group {% if 'hospital' in request.resolver_match.url_name %}text-surface-container-lowest bg-primary font-bold shadow-sm{% else %}text-outline-variant hover:text-surface-container-lowest hover:bg-surface-variant/10{% endif %}">
+                <span class="material-symbols-outlined {% if 'hospital' in request.resolver_match.url_name %}filled{% endif %}">local_hospital</span>
+                <span>Hospitals</span>
+            </a>
+
+            <!-- Directors -->
+            <a href="{% url 'director_list' %}" class="flex items-center gap-4 px-4 py-3 mx-2 rounded-lg cursor-pointer transition-all active:scale-95 group {% if 'director' in request.resolver_match.url_name %}text-surface-container-lowest bg-primary font-bold shadow-sm{% else %}text-outline-variant hover:text-surface-container-lowest hover:bg-surface-variant/10{% endif %}">
+                <span class="material-symbols-outlined {% if 'director' in request.resolver_match.url_name %}filled{% endif %}">supervisor_account</span>
+                <span>Directors</span>
+            </a>
+
+            <!-- Wards -->
+            <a href="{% url 'ward_list' %}" class="flex items-center gap-4 px-4 py-3 mx-2 rounded-lg cursor-pointer transition-all active:scale-95 group {% if 'ward' in request.resolver_match.url_name %}text-surface-container-lowest bg-primary font-bold shadow-sm{% else %}text-outline-variant hover:text-surface-container-lowest hover:bg-surface-variant/10{% endif %}">
+                <span class="material-symbols-outlined {% if 'ward' in request.resolver_match.url_name %}filled{% endif %}">meeting_room</span>
+                <span>Wards</span>
+            </a>
+        </nav>
+
+        <div class="mt-auto px-2">
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="w-full flex items-center gap-4 text-outline-variant hover:text-surface-container-lowest px-4 py-3 hover:bg-surface-variant/10 transition-colors cursor-pointer active:scale-95 rounded-lg font-label-md text-label-md text-left">
+                    <span class="material-symbols-outlined">logout</span>
+                    <span>Logout</span>
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- TopNavBar -->
+    <header class="fixed top-0 right-0 h-[64px] left-0 md:left-[260px] bg-surface dark:bg-surface-dim border-b border-outline-variant flex items-center justify-between px-lg z-40">
+        <div class="flex items-center gap-4">
+            <form action="{% block search_action %}{% endblock %}" method="get" class="relative hidden sm:block">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+                <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Search network..." class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-primary w-64 transition-all outline-none"/>
+            </form>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <button class="text-on-surface-variant hover:bg-surface-container-high transition-colors p-2 rounded-full relative">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+            </button>
+            <button class="text-on-surface-variant hover:bg-surface-container-high transition-colors p-2 rounded-full">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+            <div class="flex items-center gap-3 border-l border-outline-variant/50 pl-4">
+                <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container font-bold flex items-center justify-center shadow-sm">
+                    {{ user.username|slice:":1"|upper|default:"A" }}
+                </div>
+                <span class="font-title-md text-title-md text-on-surface hidden lg:inline">{{ user.username|default:"Admin" }}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Canvas -->
+    <main class="md:ml-[260px] pt-[64px] min-h-screen p-container-padding flex flex-col gap-lg">
+        
+        <!-- Flash Messages Banner -->
+        {% if messages %}
+            <div class="space-y-3 mb-2">
+                {% for message in messages %}
+                    <div class="flex items-center bg-surface-container-lowest border-l-4 {% if message.tags == 'error' %}border-error{% else %}border-secondary{% endif %} p-4 rounded-lg shadow-sm gap-3 transition-all duration-300">
+                        <span class="material-symbols-outlined {% if message.tags == 'error' %}text-error{% else %}text-secondary{% endif %} filled">
+                            {% if message.tags == 'error' %}error{% else %}check_circle{% endif %}
+                        </span>
+                        <p class="font-body-md text-on-surface font-medium">{{ message }}</p>
+                        <button onclick="this.parentElement.remove()" class="ml-auto text-on-surface-variant hover:text-on-surface">
+                            <span class="material-symbols-outlined text-sm">close</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
