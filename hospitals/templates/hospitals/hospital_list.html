@@ -5,68 +5,78 @@
 {% block search_action %}{% url 'hospital_list' %}{% endblock %}
 
 {% block content %}
-<!-- Content Header -->
-<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-surface-container-lowest p-lg rounded-lg shadow-sm border border-outline-variant/30 gap-4">
-    <div>
-        <h2 class="font-display-lg text-display-lg text-on-background font-bold">Hospitals</h2>
-        <p class="font-body-md text-outline mt-1">Manage and monitor hospital facilities across the network.</p>
+<!-- Page Header -->
+<div class="card bp-card mb-4">
+    <div class="card-body p-4 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+        <div>
+            <h2 class="font-bold text-dark mb-1">Hospitals</h2>
+            <p class="text-muted mb-0">Manage and monitor hospital facilities across the network.</p>
+        </div>
+        <a href="{% url 'hospital_create' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm fw-semibold">
+            <i class="bi bi-plus-circle-fill"></i> Add Hospital
+        </a>
     </div>
-    <a href="{% url 'hospital_create' %}" class="bg-primary-container text-on-primary-container font-title-md px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-primary hover:text-on-primary transition-colors font-semibold shadow-sm shrink-0">
-        <span class="material-symbols-outlined text-sm">add</span> Add Hospital
-    </a>
 </div>
 
-<!-- Search and Filters -->
-<div class="bg-surface-container-lowest p-lg rounded-lg shadow-sm border border-outline-variant/30">
-    <form action="{% url 'hospital_list' %}" method="get" class="flex gap-4">
-        <div class="relative flex-grow">
-            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-            <input type="text" name="q" value="{{ search_query }}" placeholder="Search hospitals by name or location..." class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-md font-body-md focus:outline-none focus:ring-2 focus:ring-primary/50 text-on-surface"/>
-        </div>
-        <button type="submit" class="flex items-center gap-2 px-5 py-2 bg-primary text-on-primary rounded-md font-title-md text-title-md font-semibold hover:bg-surface-tint transition-colors">
-            <span class="material-symbols-outlined text-sm">filter_list</span> Search
-        </button>
-        {% if search_query %}
-            <a href="{% url 'hospital_list' %}" class="flex items-center px-4 py-2 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-high font-semibold">Clear</a>
-        {% endif %}
-    </form>
+<!-- Search & Filter Controls -->
+<div class="card bp-card mb-4">
+    <div class="card-body p-3">
+        <form action="{% url 'hospital_list' %}" method="get" class="row g-2 align-items-center">
+            <div class="col-12 col-md">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="q" value="{{ search_query }}" placeholder="Search hospitals by name or location..." class="form-control bg-light border-start-0" />
+                </div>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary fw-semibold">
+                    <i class="bi bi-funnel me-1"></i> Search
+                </button>
+            </div>
+            {% if search_query %}
+                <div class="col-auto">
+                    <a href="{% url 'hospital_list' %}" class="btn btn-outline-secondary">Clear</a>
+                </div>
+            {% endif %}
+        </form>
+    </div>
 </div>
 
 <!-- Data Table Card -->
-<div class="bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/30 overflow-hidden flex-grow flex flex-col">
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-            <thead class="bg-[#F1F5F9] font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+<div class="card bp-card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
                 <tr>
-                    <th class="px-6 py-4 font-semibold border-b border-outline-variant/50">ID</th>
-                    <th class="px-6 py-4 font-semibold border-b border-outline-variant/50">Hospital Name</th>
-                    <th class="px-6 py-4 font-semibold border-b border-outline-variant/50">Location</th>
-                    <th class="px-6 py-4 font-semibold border-b border-outline-variant/50">Founded Year</th>
-                    <th class="px-6 py-4 font-semibold border-b border-outline-variant/50 text-right">Actions</th>
+                    <th class="ps-4">ID</th>
+                    <th>Hospital Name</th>
+                    <th>Location</th>
+                    <th>Founded Year</th>
+                    <th class="text-end pe-4">Actions</th>
                 </tr>
             </thead>
-            <tbody class="font-body-md text-on-surface divide-y divide-outline-variant/30">
+            <tbody>
                 {% if hospitals %}
                     {% for hospital in hospitals %}
-                        <tr class="hover:bg-surface-container-low/50 transition-colors h-[52px]">
-                            <td class="px-6 py-3 font-semibold text-outline">{{ hospital.hospital_id }}</td>
-                            <td class="px-6 py-3 font-bold text-on-surface">
-                                <a href="{% url 'hospital_detail' hospital.pk %}" class="hover:text-primary transition-colors">
+                        <tr>
+                            <td class="ps-4 fw-semibold text-muted">#{{ hospital.hospital_id }}</td>
+                            <td>
+                                <a href="{% url 'hospital_detail' hospital.pk %}" class="fw-bold text-primary text-decoration-none">
                                     {{ hospital.hospital_name }}
                                 </a>
                             </td>
-                            <td class="px-6 py-3 text-outline">{{ hospital.location }}</td>
-                            <td class="px-6 py-3 font-medium">{{ hospital.founded_year }}</td>
-                            <td class="px-6 py-3 text-right">
-                                <div class="flex items-center justify-end gap-2 text-outline">
-                                    <a href="{% url 'hospital_detail' hospital.pk %}" class="p-1.5 hover:text-primary transition-colors rounded hover:bg-surface-container-high" title="View">
-                                        <span class="material-symbols-outlined text-sm">visibility</span>
+                            <td><i class="bi bi-geo-alt text-danger me-1"></i>{{ hospital.location }}</td>
+                            <td><span class="badge bg-light text-dark border">{{ hospital.founded_year }}</span></td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{% url 'hospital_detail' hospital.pk %}" class="btn btn-outline-primary" title="View">
+                                        <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="{% url 'hospital_update' hospital.pk %}" class="p-1.5 hover:text-secondary transition-colors rounded hover:bg-surface-container-high" title="Edit">
-                                        <span class="material-symbols-outlined text-sm">edit</span>
+                                    <a href="{% url 'hospital_update' hospital.pk %}" class="btn btn-outline-secondary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a href="{% url 'hospital_delete' hospital.pk %}" class="p-1.5 hover:text-error transition-colors rounded hover:bg-error-container" title="Delete">
-                                        <span class="material-symbols-outlined text-sm">delete</span>
+                                    <a href="{% url 'hospital_delete' hospital.pk %}" class="btn btn-outline-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
                                     </a>
                                 </div>
                             </td>
@@ -74,8 +84,9 @@
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="5" class="px-6 py-8 text-center text-on-surface-variant font-medium">
-                            No hospitals found matching your criteria.
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-2 d-block mb-2 text-secondary"></i>
+                            No hospitals found matching your search criteria.
                         </td>
                     </tr>
                 {% endif %}
@@ -83,33 +94,33 @@
         </table>
     </div>
 
-    <!-- Pagination -->
+    <!-- Bootstrap 5 Pagination -->
     {% if is_paginated %}
-        <div class="mt-auto px-6 py-4 bg-surface-container-lowest border-t border-outline-variant/30 flex items-center justify-between">
-            <span class="font-caption text-caption text-outline">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-            </span>
-            <div class="flex items-center gap-1">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors">Prev</a>
-                {% else %}
-                    <button class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant opacity-50 cursor-not-allowed" disabled>Prev</button>
-                {% endif %}
-
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                        <span class="px-3 py-1 bg-primary text-on-primary rounded-md font-semibold">{{ num }}</span>
+        <div class="card-footer bg-white py-3 px-4 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+            <small class="text-muted">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</small>
+            <nav aria-label="Hospital pagination">
+                <ul class="pagination pagination-sm mb-0">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">Prev</a></li>
                     {% else %}
-                        <a href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors">{{ num }}</a>
+                        <li class="page-item disabled"><span class="page-link">Prev</span></li>
                     {% endif %}
-                {% endfor %}
 
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors">Next</a>
-                {% else %}
-                    <button class="px-3 py-1 border border-outline-variant rounded-md text-on-surface-variant opacity-50 cursor-not-allowed" disabled>Next</button>
-                {% endif %}
-            </div>
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">Next</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
     {% endif %}
 </div>

@@ -3,90 +3,115 @@
 {% block title %}{% if is_edit %}Edit Ward - {{ form.instance.ward_name }}{% else %}Add New Ward{% endif %} - BP Hospitals Admin{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto w-full">
-    <!-- Header -->
-    <div class="mb-6 flex items-center gap-4">
-        <a href="{% url 'ward_list' %}" class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors">
-            <span class="material-symbols-outlined">arrow_back</span>
-        </a>
-        <div>
-            <h2 class="font-display-md text-display-md text-on-surface font-bold">
-                {% if is_edit %}Edit Ward Details{% else %}Add New Ward{% endif %}
-            </h2>
-            <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">Configure ward parameters and hospital assignment.</p>
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <a href="{% url 'ward_list' %}" class="btn btn-outline-secondary btn-sm rounded-circle">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div>
+                <h2 class="font-bold text-dark mb-0">
+                    {% if is_edit %}Edit Ward Parameters{% else %}Add New Ward{% endif %}
+                </h2>
+                <p class="text-muted small mb-0">
+                    {% if is_edit %}Update ward capacity and assignment.{% else %}Configure a new ward unit within a hospital facility.{% endif %}
+                </p>
+            </div>
         </div>
-    </div>
 
-    <!-- Form Card -->
-    <div class="bg-surface-container-lowest rounded-lg p-lg shadow-sm border border-outline-variant/30">
-        <form method="post" class="space-y-6" novalidate>
-            {% csrf_token %}
+        <div class="card bp-card shadow-sm p-4">
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
 
-            {% if form.non_field_errors %}
-                <div class="p-4 bg-error-container text-on-error-container rounded-md font-medium text-sm">
-                    {{ form.non_field_errors }}
-                </div>
-            {% endif %}
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
-                <!-- Ward Name -->
-                <div class="space-y-2">
-                    <label for="{{ form.ward_name.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface">
-                        Ward Name <span class="text-error">*</span>
-                    </label>
-                    {{ form.ward_name }}
-                    {% if form.ward_name.errors %}
-                        <p class="font-caption text-caption text-error flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[16px]">error</span>
-                            {{ form.ward_name.errors.0 }}
-                        </p>
-                    {% endif %}
-                </div>
-
-                <!-- Capacity -->
-                <div class="space-y-2">
-                    <label for="{{ form.capacity.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface">
-                        Capacity (Beds) <span class="text-error">*</span>
-                    </label>
-                    <div class="relative">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant">bed</span>
-                        {{ form.capacity }}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger d-flex align-items-center mb-3" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>{{ form.non_field_errors.0 }}</div>
                     </div>
-                    {% if form.capacity.errors %}
-                        <p class="font-caption text-caption text-error flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[16px]">error</span>
-                            {{ form.capacity.errors.0 }}
-                        </p>
-                    {% endif %}
-                </div>
+                {% endif %}
 
-                <!-- Hospital Dropdown -->
-                <div class="space-y-2 md:col-span-2">
-                    <label for="{{ form.hospital.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface">
-                        Hospital Assignment <span class="text-error">*</span>
-                    </label>
-                    <div class="relative">
-                        {{ form.hospital }}
+                <div class="row g-3">
+                    <!-- Ward Name -->
+                    <div class="col-12">
+                        <label for="{{ form.ward_name.id_for_label }}" class="form-label font-bold text-dark">
+                            Ward Name <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text bg-light"><i class="bi bi-door-open text-muted"></i></span>
+                            <input type="text"
+                                   name="{{ form.ward_name.name }}"
+                                   id="{{ form.ward_name.id_for_label }}"
+                                   value="{{ form.ward_name.value|default:'' }}"
+                                   class="form-control {% if form.ward_name.errors %}is-invalid{% endif %}"
+                                   placeholder="e.g. Cardiac ICU"
+                                   required
+                                   maxlength="150" />
+                            {% if form.ward_name.errors %}
+                                <div class="invalid-feedback d-block">{{ form.ward_name.errors.0 }}</div>
+                            {% else %}
+                                <div class="invalid-feedback">Please enter ward name.</div>
+                            {% endif %}
+                        </div>
                     </div>
-                    {% if form.hospital.errors %}
-                        <p class="font-caption text-caption text-error flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[16px]">error</span>
-                            {{ form.hospital.errors.0 }}
-                        </p>
-                    {% endif %}
-                </div>
-            </div>
 
-            <!-- Actions -->
-            <div class="flex items-center justify-end space-x-4 pt-6 border-t border-outline-variant/50 mt-8">
-                <a href="{% url 'ward_list' %}" class="px-6 py-2.5 rounded-lg font-title-md text-title-md font-medium text-primary hover:bg-primary/10 transition-colors">
-                    Cancel
-                </a>
-                <button type="submit" class="px-6 py-2.5 rounded-lg font-title-md text-title-md font-medium bg-primary text-on-primary hover:bg-surface-tint shadow-sm hover:shadow-md transition-all font-semibold">
-                    Save Ward Changes
-                </button>
-            </div>
-        </form>
+                    <!-- Capacity -->
+                    <div class="col-12 col-md-6">
+                        <label for="{{ form.capacity.id_for_label }}" class="form-label font-bold text-dark">
+                            Capacity (Beds) <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text bg-light"><i class="bi bi-badge-ad text-muted"></i></span>
+                            <input type="number"
+                                   name="{{ form.capacity.name }}"
+                                   id="{{ form.capacity.id_for_label }}"
+                                   value="{{ form.capacity.value|default:'' }}"
+                                   class="form-control {% if form.capacity.errors %}is-invalid{% endif %}"
+                                   placeholder="e.g. 24"
+                                   required
+                                   min="1"
+                                   max="500" />
+                            {% if form.capacity.errors %}
+                                <div class="invalid-feedback d-block">{{ form.capacity.errors.0 }}</div>
+                            {% else %}
+                                <div class="invalid-feedback">Capacity must be between 1 and 500 beds.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Hospital -->
+                    <div class="col-12 col-md-6">
+                        <label for="{{ form.hospital.id_for_label }}" class="form-label font-bold text-dark">
+                            Hospital Facility <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text bg-light"><i class="bi bi-hospital text-muted"></i></span>
+                            <select name="{{ form.hospital.name }}"
+                                    id="{{ form.hospital.id_for_label }}"
+                                    class="form-select {% if form.hospital.errors %}is-invalid{% endif %}"
+                                    required>
+                                {% for choice_val, choice_label in form.hospital.field.choices %}
+                                    <option value="{{ choice_val }}" {% if form.hospital.value|stringformat:"s" == choice_val|stringformat:"s" %}selected{% endif %}>
+                                        {{ choice_label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            {% if form.hospital.errors %}
+                                <div class="invalid-feedback d-block">{{ form.hospital.errors.0 }}</div>
+                            {% else %}
+                                <div class="invalid-feedback">Please select a hospital.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                    <a href="{% url 'ward_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                        <i class="bi bi-save me-1"></i> Save Ward
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

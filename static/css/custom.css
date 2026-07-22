@@ -1,5 +1,140 @@
-/* Custom Styling for BP Hospitals Admin System */
+/* BP Hospitals - Custom Bootstrap 5 Brand Styling */
+
+:root {
+    --bp-primary: #005698;
+    --bp-primary-dark: #003e6f;
+    --bp-primary-light: #e8f1f8;
+    --bp-secondary: #006a69;
+    --bp-accent: #0f6fbe;
+    --bp-bg: #f8fafc;
+    --bp-dark-sidebar: #1e293b;
+    --bp-text: #0f172a;
+    --bp-muted: #64748b;
+}
+
 body {
-    background-color: #F8FAFC;
-    color: #111c2d;
+    background-color: var(--bp-bg);
+    color: var(--bp-text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Header Navbar */
+.bp-header {
+    height: 64px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Offcanvas Sidebar */
+.bp-sidebar {
+    width: 260px;
+    background-color: var(--bp-dark-sidebar);
+    color: #f8fafc;
+}
+
+.bp-sidebar .nav-link {
+    color: #94a3b8;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.bp-sidebar .nav-link:hover,
+.bp-sidebar .nav-link.active {
+    color: #ffffff;
+    background-color: var(--bp-primary);
+}
+
+.bp-sidebar .nav-link i {
+    font-size: 1.2rem;
+}
+
+/* Main Content Area */
+@media (min-width: 768px) {
+    .bp-main-content {
+        margin-left: 260px;
+        padding-top: 64px;
+    }
+}
+@media (max-width: 767.98px) {
+    .bp-main-content {
+        margin-left: 0;
+        padding-top: 64px;
+    }
+}
+
+/* Cards & Bento Grid */
+.bp-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bp-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Badges & Accents */
+.badge-bp-primary {
+    background-color: var(--bp-primary-light);
+    color: var(--bp-primary);
+    font-weight: 600;
+}
+
+/* Custom Table Responsive Wrapper */
+.table-responsive {
+    border-radius: 0.5rem;
+}
+
+.table th {
+    background-color: #f1f5f9;
+    color: #475569;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+/* Dropdown Menu Customization */
+.dropdown-menu {
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    color: #334155;
+}
+
+.dropdown-item:hover {
+    background-color: var(--bp-primary-light);
+    color: var(--bp-primary);
+}
+
+/* Form Validation Styling */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #dc3545;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5zM6 8.2a.6.6 0 1 0 0-1.2.6.6 0 0 0 0 1.2z'/%3e%3c/svg%3e");
+}
+
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: #198754;
+}
+
+.invalid-feedback {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Numeric input styling */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    opacity: 1;
 }

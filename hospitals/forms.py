@@ -1,32 +1,61 @@
+import datetime
 from django import forms
 from .models import Hospital
-import datetime
 
 
 class HospitalForm(forms.ModelForm):
     """
     Form for Creating and Updating Hospital entities.
-    Applies custom widgets and Tailwind CSS classes to match design specs.
+    Applies Bootstrap 5 form-control classes and explicit server/client validation attributes.
     """
     class Meta:
         model = Hospital
         fields = ['hospital_name', 'location', 'founded_year']
         widgets = {
             'hospital_name': forms.TextInput(attrs={
-                'class': 'w-full pl-10 pr-4 py-2 border border-outline-variant rounded-md font-body-md text-body-md bg-surface text-on-surface focus:ring-2 focus:ring-primary-container/50 focus:border-primary-container transition-shadow',
-                'placeholder': 'e.g., General Regional Medical Center'
+                'class': 'form-control',
+                'placeholder': 'e.g., General Regional Medical Center',
+                'required': 'required',
+                'maxlength': '200'
             }),
             'location': forms.TextInput(attrs={
-                'class': 'w-full pl-10 pr-4 py-2 border border-outline-variant rounded-md font-body-md text-body-md bg-surface text-on-surface focus:ring-2 focus:ring-primary-container/50 focus:border-primary-container transition-shadow',
-                'placeholder': 'e.g., Seattle, WA'
+                'class': 'form-control',
+                'placeholder': 'e.g., Seattle, WA',
+                'required': 'required',
+                'maxlength': '255'
             }),
             'founded_year': forms.NumberInput(attrs={
-                'class': 'w-full pl-10 pr-4 py-2 border border-outline-variant rounded-md font-body-md text-body-md bg-surface text-on-surface focus:ring-2 focus:ring-primary-container/50 focus:border-primary-container transition-shadow',
+                'class': 'form-control',
                 'placeholder': 'YYYY',
+                'required': 'required',
                 'min': '1800',
                 'max': str(datetime.date.today().year)
             })
         }
+
+    def clean_hospital_name(self):
+        name = self.cleaned_data.get('hospital_name')
+        if name:
+            stripped = name.strip()
+            if not stripped:
+                raise forms.ValidationError("Hospital name cannot consist only of whitespace.")
+            # Check duplicate hospital name (case-insensitive) excluding current instance
+            qs = Hospital.objects.filter(hospital_name__iexact=stripped)
+            if self.instance and self.instance.pk:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                raise forms.ValidationError("A hospital facility with this name already exists.")
+            return stripped
+        return name
+
+    def clean_location(self):
+        location = self.cleaned_data.get('location')
+        if location:
+            stripped = location.strip()
+            if not stripped:
+                raise forms.ValidationError("Location cannot consist only of whitespace.")
+            return stripped
+        return location
 
     def clean_founded_year(self):
         year = self.cleaned_data.get('founded_year')

@@ -7,22 +7,27 @@ from hospitals.models import Hospital
 class DirectorForm(forms.ModelForm):
     """
     Form for Creating and Updating HospitalDirector entities.
-    Filters hospital choice dropdown to available hospitals.
+    Applies Bootstrap 5 widgets and filters hospital choice dropdown to available hospitals.
     """
     class Meta:
         model = HospitalDirector
         fields = ['director_name', 'qualification', 'hospital']
         widgets = {
             'director_name': forms.TextInput(attrs={
-                'class': 'block w-full rounded border border-outline-variant shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/50 sm:text-sm px-3 py-2 text-on-surface placeholder:text-outline bg-surface-container-lowest transition-shadow',
-                'placeholder': 'e.g. Dr. Sarah Jenkins'
+                'class': 'form-control',
+                'placeholder': 'e.g. Dr. Sarah Jenkins',
+                'required': 'required',
+                'maxlength': '150'
             }),
             'qualification': forms.TextInput(attrs={
-                'class': 'block w-full rounded border border-outline-variant shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/50 sm:text-sm px-3 py-2 text-on-surface placeholder:text-outline bg-surface-container-lowest transition-shadow',
-                'placeholder': 'e.g. MD, PhD, MHA'
+                'class': 'form-control',
+                'placeholder': 'e.g. MD, PhD, MHA',
+                'required': 'required',
+                'maxlength': '200'
             }),
             'hospital': forms.Select(attrs={
-                'class': 'block w-full rounded border border-outline-variant shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/50 sm:text-sm pl-3 pr-10 py-2 text-on-surface bg-surface-container-lowest appearance-none transition-shadow cursor-pointer'
+                'class': 'form-select',
+                'required': 'required'
             })
         }
 
@@ -38,3 +43,23 @@ class DirectorForm(forms.ModelForm):
 
         self.fields['hospital'].queryset = available_hospitals
         self.fields['hospital'].empty_label = "Select a hospital facility..."
+
+    def clean_director_name(self):
+        name = self.cleaned_data.get('director_name')
+        if name:
+            stripped = name.strip()
+            if not stripped:
+                raise forms.ValidationError("Director name cannot consist only of whitespace.")
+            if stripped.isdigit():
+                raise forms.ValidationError("Director name cannot be purely numeric.")
+            return stripped
+        return name
+
+    def clean_qualification(self):
+        qual = self.cleaned_data.get('qualification')
+        if qual:
+            stripped = qual.strip()
+            if not stripped:
+                raise forms.ValidationError("Qualification cannot consist only of whitespace.")
+            return stripped
+        return qual

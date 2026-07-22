@@ -2,6 +2,7 @@ import datetime
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q, CheckConstraint
+from django.utils import timezone
 
 
 def current_year():
@@ -48,10 +49,13 @@ class Hospital(models.Model):
         help_text="Year the hospital was established (between 1800 and present)."
     )
 
+    created_at = models.DateTimeField(default=timezone.now, verbose_name="Created At")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
+
     class Meta:
         verbose_name = "Hospital"
         verbose_name_plural = "Hospitals"
-        ordering = ['hospital_name']
+        ordering = ['-updated_at', 'hospital_name']
         constraints = [
             CheckConstraint(
                 condition=Q(founded_year__gte=1800) & Q(founded_year__lte=datetime.date.today().year),

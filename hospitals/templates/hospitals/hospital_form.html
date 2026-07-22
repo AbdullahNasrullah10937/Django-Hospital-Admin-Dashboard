@@ -3,100 +3,113 @@
 {% block title %}{% if is_edit %}Edit Hospital - {{ form.instance.hospital_name }}{% else %}Add New Hospital{% endif %} - BP Hospitals Admin{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto w-full">
-    <!-- Page Header -->
-    <div class="mb-6 flex items-center gap-4">
-        <a href="{% url 'hospital_list' %}" class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors">
-            <span class="material-symbols-outlined">arrow_back</span>
-        </a>
-        <div>
-            <h2 class="font-display-md text-display-md text-on-surface font-bold">
-                {% if is_edit %}Edit Hospital Facility{% else %}Add New Hospital{% endif %}
-            </h2>
-            <p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
-                {% if is_edit %}Update hospital parameters and details.{% else %}Register a new hospital facility in the BP network.{% endif %}
-            </p>
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <a href="{% url 'hospital_list' %}" class="btn btn-outline-secondary btn-sm rounded-circle">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div>
+                <h2 class="font-bold text-dark mb-0">
+                    {% if is_edit %}Edit Hospital Facility{% else %}Add New Hospital{% endif %}
+                </h2>
+                <p class="text-muted small mb-0">
+                    {% if is_edit %}Update hospital parameters and details.{% else %}Register a new hospital facility in the BP network.{% endif %}
+                </p>
+            </div>
         </div>
-    </div>
 
-    <!-- Form Card -->
-    <div class="bg-surface-container-lowest rounded-lg p-lg shadow-sm border border-outline-variant/30">
-        <form method="post" class="space-y-6" novalidate>
-            {% csrf_token %}
+        <div class="card bp-card shadow-sm p-4">
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
 
-            {% if form.non_field_errors %}
-                <div class="p-4 bg-error-container text-on-error-container rounded-md font-medium text-sm">
-                    {{ form.non_field_errors }}
-                </div>
-            {% endif %}
-
-            <!-- Form Group: Hospital Name -->
-            <div>
-                <label for="{{ form.hospital_name.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface mb-2">
-                    Hospital Name <span class="text-error">*</span>
-                </label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
-                        <span class="material-symbols-outlined text-[20px]">domain</span>
-                    </span>
-                    {{ form.hospital_name }}
-                </div>
-                {% if form.hospital_name.errors %}
-                    <p class="mt-2 font-caption text-caption text-error flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[16px]">error</span>
-                        {{ form.hospital_name.errors.0 }}
-                    </p>
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger d-flex align-items-center mb-3" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>{{ form.non_field_errors.0 }}</div>
+                    </div>
                 {% endif %}
-            </div>
 
-            <!-- Form Group: Location -->
-            <div>
-                <label for="{{ form.location.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface mb-2">
-                    Location <span class="text-error">*</span>
-                </label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
-                        <span class="material-symbols-outlined text-[20px]">location_on</span>
-                    </span>
-                    {{ form.location }}
+                <div class="row g-3">
+                    <!-- Hospital Name -->
+                    <div class="col-12">
+                        <label for="{{ form.hospital_name.id_for_label }}" class="form-label font-bold text-dark">
+                            Hospital Name <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text bg-light"><i class="bi bi-building text-muted"></i></span>
+                            <input type="text"
+                                   name="{{ form.hospital_name.name }}"
+                                   id="{{ form.hospital_name.id_for_label }}"
+                                   value="{{ form.hospital_name.value|default:'' }}"
+                                   class="form-control {% if form.hospital_name.errors %}is-invalid{% endif %}"
+                                   placeholder="e.g., General Regional Medical Center"
+                                   required
+                                   maxlength="200" />
+                            {% if form.hospital_name.errors %}
+                                <div class="invalid-feedback d-block">{{ form.hospital_name.errors.0 }}</div>
+                            {% else %}
+                                <div class="invalid-feedback">Please provide a valid hospital name.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="col-12 col-md-6">
+                        <label for="{{ form.location.id_for_label }}" class="form-label font-bold text-dark">
+                            Location <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text bg-light"><i class="bi bi-geo-alt text-muted"></i></span>
+                            <input type="text"
+                                   name="{{ form.location.name }}"
+                                   id="{{ form.location.id_for_label }}"
+                                   value="{{ form.location.value|default:'' }}"
+                                   class="form-control {% if form.location.errors %}is-invalid{% endif %}"
+                                   placeholder="e.g., Seattle, WA"
+                                   required
+                                   maxlength="255" />
+                            {% if form.location.errors %}
+                                <div class="invalid-feedback d-block">{{ form.location.errors.0 }}</div>
+                            {% else %}
+                                <div class="invalid-feedback">Please provide a location.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Founded Year -->
+                    <div class="col-12 col-md-6">
+                        <label for="{{ form.founded_year.id_for_label }}" class="form-label font-bold text-dark">
+                            Founded Year <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text bg-light"><i class="bi bi-calendar-event text-muted"></i></span>
+                            <input type="number"
+                                   name="{{ form.founded_year.name }}"
+                                   id="{{ form.founded_year.id_for_label }}"
+                                   value="{{ form.founded_year.value|default:'' }}"
+                                   class="form-control {% if form.founded_year.errors %}is-invalid{% endif %}"
+                                   placeholder="YYYY"
+                                   required
+                                   min="1800"
+                                   max="2026" />
+                            {% if form.founded_year.errors %}
+                                <div class="invalid-feedback d-block">{{ form.founded_year.errors.0 }}</div>
+                            {% else %}
+                                <div class="invalid-feedback">Founded year must be between 1800 and 2026.</div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-                {% if form.location.errors %}
-                    <p class="mt-2 font-caption text-caption text-error flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[16px]">error</span>
-                        {{ form.location.errors.0 }}
-                    </p>
-                {% endif %}
-            </div>
 
-            <!-- Form Group: Founded Year -->
-            <div>
-                <label for="{{ form.founded_year.id_for_label }}" class="block font-body-md text-body-md font-bold text-on-surface mb-2">
-                    Founded Year <span class="text-error">*</span>
-                </label>
-                <div class="relative w-full sm:w-1/2">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
-                        <span class="material-symbols-outlined text-[20px]">calendar_today</span>
-                    </span>
-                    {{ form.founded_year }}
+                <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                    <a href="{% url 'hospital_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                        <i class="bi bi-save me-1"></i> Save Hospital
+                    </button>
                 </div>
-                {% if form.founded_year.errors %}
-                    <p class="mt-2 font-caption text-caption text-error flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[16px]">error</span>
-                        {{ form.founded_year.errors.0 }}
-                    </p>
-                {% endif %}
-            </div>
-
-            <!-- Actions -->
-            <div class="pt-6 mt-6 border-t border-outline-variant flex justify-end gap-4">
-                <a href="{% url 'hospital_list' %}" class="px-6 py-2.5 rounded-md font-label-md text-label-md font-bold text-secondary border border-secondary hover:bg-secondary/10 transition-colors">
-                    Cancel
-                </a>
-                <button type="submit" class="px-6 py-2.5 rounded-md font-label-md text-label-md font-bold bg-primary-container text-on-primary-container shadow-sm hover:bg-primary hover:text-on-primary transition-colors">
-                    Save Hospital
-                </button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

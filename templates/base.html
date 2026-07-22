@@ -1,222 +1,217 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{% block title %}BP Hospitals - Admin Console{% endblock %}</title>
     
-    <!-- Fonts & Icons -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     
-    <!-- Tailwind CSS with Design Token Config -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "secondary": "#006a69",
-                        "surface-container-lowest": "#ffffff",
-                        "on-secondary-container": "#00706f",
-                        "on-error": "#ffffff",
-                        "secondary-fixed": "#98f2f0",
-                        "inverse-primary": "#a1c9ff",
-                        "on-error-container": "#93000a",
-                        "primary-container": "#0f6fbe",
-                        "on-primary-fixed-variant": "#004880",
-                        "on-tertiary-fixed": "#301400",
-                        "surface-container": "#e7eeff",
-                        "primary": "#005698",
-                        "surface-dim": "#cfdaf2",
-                        "tertiary-container": "#aa5600",
-                        "on-secondary-fixed": "#002020",
-                        "on-secondary-fixed-variant": "#00504f",
-                        "primary-fixed-dim": "#a1c9ff",
-                        "surface-container-high": "#dee8ff",
-                        "error-container": "#ffdad6",
-                        "primary-fixed": "#d3e4ff",
-                        "outline": "#717782",
-                        "on-background": "#111c2d",
-                        "inverse-on-surface": "#ecf1ff",
-                        "surface-variant": "#d8e3fb",
-                        "on-primary": "#ffffff",
-                        "surface-tint": "#0060a8",
-                        "on-primary-fixed": "#001c38",
-                        "secondary-fixed-dim": "#7cd5d3",
-                        "tertiary-fixed": "#ffdcc6",
-                        "surface-bright": "#f9f9ff",
-                        "tertiary-fixed-dim": "#ffb784",
-                        "surface-container-highest": "#d8e3fb",
-                        "on-tertiary": "#ffffff",
-                        "on-secondary": "#ffffff",
-                        "on-tertiary-container": "#ffece2",
-                        "inverse-surface": "#263143",
-                        "on-tertiary-fixed-variant": "#713700",
-                        "tertiary": "#864200",
-                        "on-surface": "#111c2d",
-                        "surface-container-low": "#f0f3ff",
-                        "background": "#f9f9ff",
-                        "secondary-container": "#98f2f0",
-                        "error": "#ba1a1a",
-                        "on-primary-container": "#e9f0ff",
-                        "on-surface-variant": "#414751",
-                        "outline-variant": "#c1c7d3",
-                        "surface": "#f9f9ff"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "gutter": "24px",
-                        "xs": "4px",
-                        "sm": "8px",
-                        "base": "4px",
-                        "lg": "24px",
-                        "xl": "32px",
-                        "container-padding": "32px",
-                        "sidebar-width": "260px",
-                        "md": "16px",
-                        "header-height": "64px"
-                    },
-                    "fontFamily": {
-                        "sans": ["Inter", "sans-serif"],
-                        "display-lg": ["Inter", "sans-serif"],
-                        "display-md": ["Inter", "sans-serif"],
-                        "headline-sm": ["Inter", "sans-serif"],
-                        "title-md": ["Inter", "sans-serif"],
-                        "body-lg": ["Inter", "sans-serif"],
-                        "body-md": ["Inter", "sans-serif"],
-                        "label-md": ["Inter", "sans-serif"],
-                        "caption": ["Inter", "sans-serif"]
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            background-color: #F8FAFC;
-            font-family: 'Inter', sans-serif;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .material-symbols-outlined.filled {
-            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .card-shadow {
-            box-shadow: 0px 2px 4px rgba(30, 41, 59, 0.05);
-        }
-    </style>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+    <!-- Flatpickr CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet"/>
+    <!-- Custom Theme Stylesheet -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet"/>
+
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-background text-on-surface font-body-md antialiased min-h-screen">
-    
-    <!-- SideNavBar -->
-    <aside class="hidden md:flex bg-inverse-surface font-label-md text-label-md fixed left-0 top-0 h-full w-[260px] shadow-md flex-col py-lg z-50">
-        <!-- Sidebar Logo: transparent icon + white text, no container needed -->
-        <div class="px-lg mb-6 flex items-center gap-3">
-            <img src="{% static 'img/logo_icon.png' %}" alt="BP Hospitals" class="h-10 w-10 object-contain shrink-0" />
-            <div>
-                <h1 class="text-surface-container-lowest font-bold text-base leading-tight tracking-tight">Inter BP Hospitals</h1>
-                <p class="text-primary-fixed text-xs mt-0.5 leading-tight">Admin Management System</p>
-            </div>
+<body class="bg-light min-vh-100 d-flex flex-column">
+
+    <!-- Top Header Bar -->
+    <header class="bp-header fixed-top d-flex align-items-center justify-content-between px-3 px-md-4 z-3">
+        <div class="d-flex align-items-center gap-3">
+            <!-- Mobile Offcanvas Toggle Button -->
+            <button class="btn border-0 d-md-none p-1 text-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas" aria-label="Toggle navigation">
+                <i class="bi bi-list fs-2"></i>
+            </button>
+
+            <!-- Global Search Form -->
+            <form action="{% block search_action %}{% url 'hospital_list' %}{% endblock %}" method="get" class="d-none d-sm-flex position-relative align-items-center">
+                <i class="bi bi-search position-absolute ms-3 text-muted"></i>
+                <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Search network..." class="form-control ps-5 pe-3 rounded-pill bg-light border-0" style="width: 260px;" />
+            </form>
         </div>
         
-        <nav class="flex-1 flex flex-col gap-2">
-            <!-- Dashboard -->
-            <a href="{% url 'dashboard' %}" class="flex items-center gap-4 px-4 py-3 mx-2 rounded-lg cursor-pointer transition-all active:scale-95 group {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'dashboard_alias' %}text-surface-container-lowest bg-primary font-bold shadow-sm{% else %}text-outline-variant hover:text-surface-container-lowest hover:bg-surface-variant/10{% endif %}">
-                <span class="material-symbols-outlined {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'dashboard_alias' %}filled{% endif %}">dashboard</span>
-                <span>Dashboard</span>
-            </a>
-
-            <!-- Hospitals -->
-            <a href="{% url 'hospital_list' %}" class="flex items-center gap-4 px-4 py-3 mx-2 rounded-lg cursor-pointer transition-all active:scale-95 group {% if 'hospital' in request.resolver_match.url_name %}text-surface-container-lowest bg-primary font-bold shadow-sm{% else %}text-outline-variant hover:text-surface-container-lowest hover:bg-surface-variant/10{% endif %}">
-                <span class="material-symbols-outlined {% if 'hospital' in request.resolver_match.url_name %}filled{% endif %}">local_hospital</span>
-                <span>Hospitals</span>
-            </a>
-
-            <!-- Directors -->
-            <a href="{% url 'director_list' %}" class="flex items-center gap-4 px-4 py-3 mx-2 rounded-lg cursor-pointer transition-all active:scale-95 group {% if 'director' in request.resolver_match.url_name %}text-surface-container-lowest bg-primary font-bold shadow-sm{% else %}text-outline-variant hover:text-surface-container-lowest hover:bg-surface-variant/10{% endif %}">
-                <span class="material-symbols-outlined {% if 'director' in request.resolver_match.url_name %}filled{% endif %}">supervisor_account</span>
-                <span>Directors</span>
-            </a>
-
-            <!-- Wards -->
-            <a href="{% url 'ward_list' %}" class="flex items-center gap-4 px-4 py-3 mx-2 rounded-lg cursor-pointer transition-all active:scale-95 group {% if 'ward' in request.resolver_match.url_name %}text-surface-container-lowest bg-primary font-bold shadow-sm{% else %}text-outline-variant hover:text-surface-container-lowest hover:bg-surface-variant/10{% endif %}">
-                <span class="material-symbols-outlined {% if 'ward' in request.resolver_match.url_name %}filled{% endif %}">meeting_room</span>
-                <span>Wards</span>
-            </a>
-        </nav>
-
-        <div class="mt-auto px-2">
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="w-full flex items-center gap-4 text-outline-variant hover:text-surface-container-lowest px-4 py-3 hover:bg-surface-variant/10 transition-colors cursor-pointer active:scale-95 rounded-lg font-label-md text-label-md text-left">
-                    <span class="material-symbols-outlined">logout</span>
-                    <span>Logout</span>
+        <div class="d-flex align-items-center gap-2">
+            <!-- Notifications Dropdown -->
+            <div class="dropdown">
+                <button class="btn btn-light rounded-circle position-relative p-2 d-flex align-items-center justify-content-center" 
+                        type="button" 
+                        id="notificationsDropdown" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false" 
+                        aria-haspopup="true" 
+                        title="Notifications"
+                        style="width: 40px; height: 40px;">
+                    <i class="bi bi-bell fs-5 text-secondary"></i>
+                    {% if unread_notifications_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" style="font-size: 0.65rem;">
+                            {{ unread_notifications_count }}
+                        </span>
+                    {% endif %}
                 </button>
-            </form>
-        </div>
-    </aside>
+                <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-0 overflow-hidden" aria-labelledby="notificationsDropdown" style="width: 320px; max-height: 420px;">
+                    <div class="p-3 bg-primary text-white d-flex align-items-center justify-content-between">
+                        <h6 class="mb-0 font-bold"><i class="bi bi-bell-fill me-2"></i>Recent Activity</h6>
+                        <span class="badge bg-light text-primary">{{ notifications|length }}</span>
+                    </div>
+                    <div class="list-group list-group-flush overflow-auto" style="max-height: 320px;">
+                        {% if notifications %}
+                            {% for item in notifications %}
+                                <a href="{{ item.url }}" class="list-group-item list-group-item-action p-3 d-flex align-items-start gap-3">
+                                    <div class="p-2 rounded-circle {{ item.badge_class }} text-white flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                        <i class="bi {{ item.icon }}"></i>
+                                    </div>
+                                    <div class="w-100 min-width-0">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <strong class="text-dark small text-truncate d-block" style="max-width: 170px;">{{ item.title }}</strong>
+                                            <small class="text-muted" style="font-size: 0.7rem;">{{ item.timestamp|timesince }} ago</small>
+                                        </div>
+                                        <p class="mb-0 text-muted small text-truncate" style="max-width: 220px;">{{ item.subtitle }}</p>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        {% else %}
+                            <div class="p-4 text-center text-muted">
+                                <i class="bi bi-bell-slash fs-3 d-block mb-2 text-secondary"></i>
+                                <p class="mb-0 small">No new notifications</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
-    <!-- TopNavBar -->
-    <header class="fixed top-0 right-0 h-[64px] left-0 md:left-[260px] bg-surface dark:bg-surface-dim border-b border-outline-variant flex items-center justify-between px-lg z-40">
-        <div class="flex items-center gap-4">
-            <form action="{% block search_action %}{% endblock %}" method="get" class="relative hidden sm:block">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-                <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Search network..." class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-primary w-64 transition-all outline-none"/>
-            </form>
-        </div>
-        
-        <div class="flex items-center gap-4">
-            <button class="text-on-surface-variant hover:bg-surface-container-high transition-colors p-2 rounded-full relative">
-                <span class="material-symbols-outlined">notifications</span>
-                <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
-            </button>
-            <button class="text-on-surface-variant hover:bg-surface-container-high transition-colors p-2 rounded-full">
-                <span class="material-symbols-outlined">settings</span>
-            </button>
-            <div class="flex items-center gap-3 border-l border-outline-variant/50 pl-4">
-                <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container font-bold flex items-center justify-center shadow-sm">
+            <!-- Settings Dropdown -->
+            <div class="dropdown">
+                <button class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center" 
+                        type="button" 
+                        id="settingsDropdown" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false" 
+                        aria-haspopup="true" 
+                        title="Settings"
+                        style="width: 40px; height: 40px;">
+                    <i class="bi bi-gear fs-5 text-secondary"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 py-2" aria-labelledby="settingsDropdown" style="min-width: 220px;">
+                    <li><h6 class="dropdown-header">System Settings</h6></li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2" href="{% url 'password_change' %}">
+                            <i class="bi bi-key text-primary"></i> Change Admin Password
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2" href="/admin/" target="_blank">
+                            <i class="bi bi-speedometer text-info"></i> Django Admin Panel
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form action="{% url 'logout' %}" method="post" class="px-2">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item text-danger rounded d-flex align-items-center gap-2 w-100">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- User Avatar & Identity -->
+            <div class="d-flex align-items-center gap-2 ps-2 border-start">
+                <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-center shadow-sm" style="width: 36px; height: 36px; font-size: 0.9rem;">
                     {{ user.username|slice:":1"|upper|default:"A" }}
                 </div>
-                <span class="font-title-md text-title-md text-on-surface hidden lg:inline">{{ user.username|default:"Admin" }}</span>
+                <span class="fw-semibold text-dark d-none d-lg-inline">{{ user.username|default:"Admin" }}</span>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Canvas -->
-    <main class="md:ml-[260px] pt-[64px] min-h-screen p-container-padding flex flex-col gap-lg">
-        
-        <!-- Flash Messages Banner -->
-        {% if messages %}
-            <div class="space-y-3 mb-2">
-                {% for message in messages %}
-                    <div class="flex items-center bg-surface-container-lowest border-l-4 {% if message.tags == 'error' %}border-error{% else %}border-secondary{% endif %} p-4 rounded-lg shadow-sm gap-3 transition-all duration-300">
-                        <span class="material-symbols-outlined {% if message.tags == 'error' %}text-error{% else %}text-secondary{% endif %} filled">
-                            {% if message.tags == 'error' %}error{% else %}check_circle{% endif %}
-                        </span>
-                        <p class="font-body-md text-on-surface font-medium">{{ message }}</p>
-                        <button onclick="this.parentElement.remove()" class="ml-auto text-on-surface-variant hover:text-on-surface">
-                            <span class="material-symbols-outlined text-sm">close</span>
-                        </button>
-                    </div>
-                {% endfor %}
+    <!-- Navigation Sidebar (Desktop + Mobile Offcanvas) -->
+    <div class="offcanvas-md offcanvas-start bp-sidebar position-fixed top-0 bottom-0 start-0 z-3" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+        <div class="offcanvas-header p-3 border-bottom border-secondary border-opacity-25">
+            <div class="d-flex align-items-center gap-2">
+                <img src="{% static 'img/logo_icon.png' %}" alt="Logo" class="img-fluid" style="max-height: 36px;" />
+                <h5 class="offcanvas-title text-white font-bold" id="sidebarOffcanvasLabel">BP Hospitals</h5>
             </div>
-        {% endif %}
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarOffcanvas" aria-label="Close"></button>
+        </div>
+        
+        <div class="offcanvas-body flex-column p-3 h-100">
+            <!-- Sidebar Header / Logo (Desktop display) -->
+            <div class="d-none d-md-flex align-items-center gap-3 mb-4 px-2">
+                <img src="{% static 'img/logo_icon.png' %}" alt="BP Hospitals" class="img-fluid" style="max-height: 40px;" />
+                <div>
+                    <h1 class="text-white font-bold h6 mb-0">Inter BP Hospitals</h1>
+                    <small class="text-info" style="font-size: 0.7rem;">Admin Console</small>
+                </div>
+            </div>
 
-        {% block content %}{% endblock %}
+            <!-- Nav Links -->
+            <nav class="nav nav-pills flex-column gap-2">
+                <a href="{% url 'dashboard' %}" class="nav-link d-flex align-items-center gap-3 {% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'dashboard_alias' %}active{% endif %}">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{% url 'hospital_list' %}" class="nav-link d-flex align-items-center gap-3 {% if 'hospital' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-hospital-fill"></i>
+                    <span>Hospitals</span>
+                </a>
+                <a href="{% url 'director_list' %}" class="nav-link d-flex align-items-center gap-3 {% if 'director' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-person-badge-fill"></i>
+                    <span>Directors</span>
+                </a>
+                <a href="{% url 'ward_list' %}" class="nav-link d-flex align-items-center gap-3 {% if 'ward' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="bi bi-door-open-fill"></i>
+                    <span>Wards</span>
+                </a>
+            </nav>
 
+            <div class="mt-auto pt-4">
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-light w-100 text-start d-flex align-items-center gap-3 border-0 py-2">
+                        <i class="bi bi-box-arrow-right fs-5"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Layout Canvas -->
+    <main class="bp-main-content flex-grow-1 p-3 p-md-4">
+        <div class="container-fluid max-width-xl px-0">
+            <!-- Flash Message Alerts -->
+            {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show shadow-sm border-0 d-flex align-items-center gap-2" role="alert">
+                            <i class="bi {% if message.tags == 'error' %}bi-exclamation-triangle-fill{% else %}bi-check-circle-fill{% endif %} fs-5"></i>
+                            <div>{{ message }}</div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
     </main>
+
+    <!-- Bootstrap 5 JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Custom App Script -->
+    <script src="{% static 'js/main.js' %}"></script>
 
     {% block extra_js %}{% endblock %}
 </body>

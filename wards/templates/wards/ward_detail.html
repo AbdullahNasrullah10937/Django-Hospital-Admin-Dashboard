@@ -3,51 +3,55 @@
 {% block title %}{{ ward.ward_name }} - BP Hospitals Admin{% endblock %}
 
 {% block content %}
-<!-- Breadcrumb & Back -->
-<div class="mb-lg flex items-center text-outline text-body-md">
-    <a href="{% url 'ward_list' %}" class="hover:text-primary transition-colors flex items-center gap-1 font-semibold">
-        <span class="material-symbols-outlined text-[18px]">arrow_back</span> Wards
-    </a>
-    <span class="mx-2">/</span>
-    <span class="text-on-surface font-semibold">{{ ward.ward_name }}</span>
-</div>
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'ward_list' %}" class="text-decoration-none"><i class="bi bi-door-open me-1"></i>Wards</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ ward.ward_name }}</li>
+    </ol>
+</nav>
 
-<div class="max-w-4xl mx-auto w-full">
-    <div class="bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/30 p-lg relative overflow-hidden">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-b border-outline-variant/30 pb-6 mb-6">
-            <div class="flex items-center gap-4">
-                <div class="w-16 h-16 rounded-lg bg-secondary/10 text-secondary font-bold text-3xl flex items-center justify-center border border-outline-variant/30 shrink-0">
-                    <span class="material-symbols-outlined text-3xl">meeting_room</span>
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+        <div class="card bp-card shadow-sm p-4">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 border-bottom pb-4 mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="p-3 rounded-3 bg-success bg-opacity-10 text-success">
+                        <i class="bi bi-door-open fs-1"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-dark mb-1">{{ ward.ward_name }}</h3>
+                        <p class="text-muted mb-0">Capacity: <strong class="text-dark">{{ ward.capacity }} Beds</strong></p>
+                    </div>
                 </div>
-                <div>
-                    <h2 class="font-display-md text-display-md text-on-surface font-bold">{{ ward.ward_name }}</h2>
-                    <p class="font-title-md text-title-md text-on-surface-variant font-medium mt-0.5">Capacity: {{ ward.capacity }} Beds</p>
+                <div class="btn-group" role="group">
+                    <a href="{% url 'ward_update' ward.pk %}" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil me-1"></i> Edit
+                    </a>
+                    <a href="{% url 'ward_delete' ward.pk %}" class="btn btn-outline-danger">
+                        <i class="bi bi-trash me-1"></i> Delete
+                    </a>
                 </div>
             </div>
 
-            <div class="flex gap-2 shrink-0">
-                <a href="{% url 'ward_update' ward.pk %}" class="flex items-center gap-2 px-4 py-2 text-primary border border-primary rounded hover:bg-surface-container-low transition-colors font-semibold">
-                    <span class="material-symbols-outlined text-[18px]">edit</span> Edit
-                </a>
-                <a href="{% url 'ward_delete' ward.pk %}" class="flex items-center gap-2 px-4 py-2 text-error border border-error rounded hover:bg-error-container transition-colors font-semibold">
-                    <span class="material-symbols-outlined text-[18px]">delete</span> Delete
-                </a>
-            </div>
-        </div>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <div class="p-3 bg-light rounded-3 border">
+                        <span class="text-uppercase text-muted small fw-semibold d-block mb-1">Parent Hospital Facility</span>
+                        <a href="{% url 'hospital_detail' ward.hospital.pk %}" class="fw-bold text-primary text-decoration-none fs-5 d-flex align-items-center gap-2">
+                            <i class="bi bi-hospital"></i> {{ ward.hospital.hospital_name }}
+                        </a>
+                        <small class="text-muted d-block mt-2">Location: {{ ward.hospital.location }}</small>
+                    </div>
+                </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-surface-container-low rounded-lg p-md border border-outline-variant/30">
-                <p class="font-label-md text-label-md text-outline uppercase tracking-wider font-semibold mb-1">Parent Hospital Facility</p>
-                <a href="{% url 'hospital_detail' ward.hospital.pk %}" class="font-body-lg text-body-lg text-primary font-bold hover:underline flex items-center gap-2 mt-1">
-                    <span class="material-symbols-outlined">local_hospital</span> {{ ward.hospital.hospital_name }}
-                </a>
-                <p class="text-xs text-on-surface-variant mt-2">Location: {{ ward.hospital.location }}</p>
-            </div>
-
-            <div class="bg-surface-container-low rounded-lg p-md border border-outline-variant/30">
-                <p class="font-label-md text-label-md text-outline uppercase tracking-wider font-semibold mb-1">Ward Specifications</p>
-                <p class="font-body-md text-body-md text-on-surface font-medium mt-1">Ward ID: #{{ ward.ward_id }}</p>
-                <p class="text-xs text-on-surface-variant mt-2">Enforced Constraint: Capacity must be between 1 and 500 beds.</p>
+                <div class="col-12 col-md-6">
+                    <div class="p-3 bg-light rounded-3 border">
+                        <span class="text-uppercase text-muted small fw-semibold d-block mb-1">Ward Specifications</span>
+                        <h6 class="fw-bold text-dark mt-1">Ward Record ID: #{{ ward.ward_id }}</h6>
+                        <small class="text-muted d-block mt-2">Enforced Constraint: 1 to 500 beds capacity</small>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

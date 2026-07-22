@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from hospitals.models import Hospital
 
 
@@ -44,6 +45,9 @@ class HospitalDirector(models.Model):
         help_text="The hospital facility assigned to this director."
     )
 
+    created_at = models.DateTimeField(default=timezone.now, verbose_name="Created At")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
+
     def clean(self):
         """Custom validation for director_name."""
         super().clean()
@@ -57,7 +61,7 @@ class HospitalDirector(models.Model):
     class Meta:
         verbose_name = "Hospital Director"
         verbose_name_plural = "Hospital Directors"
-        ordering = ['director_name']
+        ordering = ['-updated_at', 'director_name']
 
     def __str__(self):
         return f"{self.director_name} - {self.qualification} ({self.hospital.hospital_name})"

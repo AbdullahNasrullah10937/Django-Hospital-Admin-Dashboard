@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q, CheckConstraint
+from django.utils import timezone
 from hospitals.models import Hospital
 
 
@@ -47,10 +48,13 @@ class Ward(models.Model):
         help_text="The hospital facility this ward belongs to."
     )
 
+    created_at = models.DateTimeField(default=timezone.now, verbose_name="Created At")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
+
     class Meta:
         verbose_name = "Ward"
         verbose_name_plural = "Wards"
-        ordering = ['ward_name']
+        ordering = ['-updated_at', 'ward_name']
         constraints = [
             CheckConstraint(
                 condition=Q(capacity__gt=0) & Q(capacity__lte=500),
