@@ -5,16 +5,18 @@ Configured for BP Hospitals - Admin Management System.
 All key configuration blocks contain explicit comments for evaluation.
 """
 
+import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nv756d=ibeqdue@2xu0efp3vtz_yx9&#_3uc#$85#b^7cd2_*2'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-nv756d=ibeqdue@2xu0efp3vtz_yx9&#_3uc#$85#b^7cd2_*2')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
 # ==============================================================================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -90,7 +93,8 @@ WSGI_APPLICATION = 'BP_Hospitals.wsgi.application'
 # ==============================================================================
 # 4. DATABASES CONFIGURATION
 # ==============================================================================
-# Default database connection configured for SQLite (file-based database).
+# Configured dynamically: uses DATABASE_URL if available (e.g., Render PostgreSQL),
+# falling back to SQLite for local development.
 # 
 # NOTE ON SWAPPING TO MYSQL FOR PRODUCTION:
 # To use MySQL instead of SQLite, install 'mysqlclient' or 'PyMySQL' and update DATABASES as follows:
@@ -108,11 +112,12 @@ WSGI_APPLICATION = 'BP_Hospitals.wsgi.application'
 #     }
 # }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        conn_max_age=600
+    )
 }
+
 
 
 # ==============================================================================
