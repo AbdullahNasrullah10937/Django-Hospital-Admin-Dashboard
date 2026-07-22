@@ -20,6 +20,26 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
+# ==============================================================================
+# CSRF & COOKIE SECURITY CONFIGURATION
+# ==============================================================================
+# Django 4.0+ requires CSRF_TRUSTED_ORIGINS for any HTTPS deployment.
+# Without this, all POST forms (login, create, update, delete) return 403 Forbidden.
+# Covers both Vercel preview URLs and the primary production domain.
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.vercel.app',
+    'https://django-hospital-admin-dashboard.vercel.app',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
+
+# Secure cookies on HTTPS (Vercel always uses HTTPS)
+if os.environ.get('VERCEL'):
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_SAMESITE = 'Lax'
+    SESSION_COOKIE_SAMESITE = 'Lax'
+
 
 # ==============================================================================
 # 1. INSTALLED APPS CONFIGURATION
