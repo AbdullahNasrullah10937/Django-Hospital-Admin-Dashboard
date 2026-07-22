@@ -111,12 +111,27 @@ WSGI_APPLICATION = 'BP_Hospitals.wsgi.application'
 #         },
 #     }
 # }
+import shutil
+
+# Vercel Serverless Writable Database Handler
+IS_VERCEL = 'VERCEL' in os.environ
+
+if IS_VERCEL:
+    tmp_db_path = '/tmp/db.sqlite3'
+    orig_db_path = BASE_DIR / 'db.sqlite3'
+    if not os.path.exists(tmp_db_path) and os.path.exists(orig_db_path):
+        shutil.copyfile(orig_db_path, tmp_db_path)
+    db_location = tmp_db_path
+else:
+    db_location = str(BASE_DIR / 'db.sqlite3')
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        default=f'sqlite:///{db_location}',
         conn_max_age=600
     )
 }
+
 
 
 
