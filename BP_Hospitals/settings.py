@@ -40,6 +40,37 @@ if os.environ.get('VERCEL'):
     CSRF_COOKIE_SAMESITE = 'Lax'
     SESSION_COOKIE_SAMESITE = 'Lax'
 
+    # ─────────────────────────────────────────────────────────────────────────
+    # SESSION BACKEND: Cookie-based (serverless-safe)
+    #
+    # WHY THIS IS NEEDED ON VERCEL:
+    # Vercel runs Django as ephemeral serverless functions.  Each cold-start
+    # spins up a NEW isolated container with its own fresh /tmp/db.sqlite3
+    # copied from the repo.  That copy has NO session rows from previous
+    # requests handled by a DIFFERENT container instance.
+    #
+    # Result: session data (and therefore login state) is silently lost on
+    # any request that lands on a different instance → Django treats the user
+    # as unauthenticated → redirects to /login/.
+    #
+    # FIX: Switch to django.contrib.sessions.backends.signed_cookies.
+    # The entire session payload is serialised, signed with SECRET_KEY, and
+    # stored inside the browser's session cookie.  No database row is needed.
+    # The session survives across ANY serverless instance because the browser
+    # sends it with every request and Django validates the signature locally.
+    #
+    # SECURITY NOTES:
+    # • The cookie is cryptographically signed (HMAC-SHA256) using SECRET_KEY.
+    #   Tampering is detected and the session is rejected.
+    # • Cookie data is NOT encrypted by default, but only non-sensitive data
+    #   (Django auth user_id + _auth_user_hash) is stored here — this is the
+    #   same data stored in DB-backed sessions.
+    # • SESSION_COOKIE_SECURE = True (set above) prevents transmission over HTTP.
+    # • Django limits signed-cookie sessions to ~4 KB.  The default Django auth
+    #   payload is well under this limit.
+    # ─────────────────────────────────────────────────────────────────────────
+    SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
 
 # ==============================================================================
 # 1. INSTALLED APPS CONFIGURATION
