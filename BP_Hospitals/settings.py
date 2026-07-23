@@ -40,36 +40,10 @@ if os.environ.get('VERCEL'):
     CSRF_COOKIE_SAMESITE = 'Lax'
     SESSION_COOKIE_SAMESITE = 'Lax'
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # SESSION BACKEND: Cookie-based (serverless-safe)
-    #
-    # WHY THIS IS NEEDED ON VERCEL:
-    # Vercel runs Django as ephemeral serverless functions.  Each cold-start
-    # spins up a NEW isolated container with its own fresh /tmp/db.sqlite3
-    # copied from the repo.  That copy has NO session rows from previous
-    # requests handled by a DIFFERENT container instance.
-    #
-    # Result: session data (and therefore login state) is silently lost on
-    # any request that lands on a different instance → Django treats the user
-    # as unauthenticated → redirects to /login/.
-    #
-    # FIX: Switch to django.contrib.sessions.backends.signed_cookies.
-    # The entire session payload is serialised, signed with SECRET_KEY, and
-    # stored inside the browser's session cookie.  No database row is needed.
-    # The session survives across ANY serverless instance because the browser
-    # sends it with every request and Django validates the signature locally.
-    #
-    # SECURITY NOTES:
-    # • The cookie is cryptographically signed (HMAC-SHA256) using SECRET_KEY.
-    #   Tampering is detected and the session is rejected.
-    # • Cookie data is NOT encrypted by default, but only non-sensitive data
-    #   (Django auth user_id + _auth_user_hash) is stored here — this is the
-    #   same data stored in DB-backed sessions.
-    # • SESSION_COOKIE_SECURE = True (set above) prevents transmission over HTTP.
-    # • Django limits signed-cookie sessions to ~4 KB.  The default Django auth
-    #   payload is well under this limit.
-    # ─────────────────────────────────────────────────────────────────────────
-    SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+    # Sessions are stored in Postgres (the Django default).
+    # No cookie-session workaround needed — Postgres is persistent across
+    # every Vercel serverless instance, so sessions survive normally.
+    SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 
 # ==============================================================================
@@ -170,24 +144,29 @@ WSGI_APPLICATION = 'BP_Hospitals.wsgi.application'
 #         },
 #     }
 # }
-import shutil
-
-# Vercel Serverless Writable Database Handler
-IS_VERCEL = 'VERCEL' in os.environ
-
-if IS_VERCEL:
-    tmp_db_path = '/tmp/db.sqlite3'
-    orig_db_path = BASE_DIR / 'db.sqlite3'
-    if not os.path.exists(tmp_db_path) and os.path.exists(orig_db_path):
-        shutil.copyfile(orig_db_path, tmp_db_path)
-    db_location = tmp_db_path
-else:
-    db_location = str(BASE_DIR / 'db.sqlite3')
+# ==============================================================================
+# DATABASE CONFIGURATION — Neon Postgres (cloud) / SQLite (local fallback)
+# ==============================================================================
+# On Vercel:  DATABASE_URL is auto-injected when you link a Neon database via
+#             the Vercel Storage tab.  All serverless instances share the same
+#             Postgres connection — data and sessions persist correctly.
+#
+# Locally:    Set DATABASE_URL in a .env file (or your shell) to point at the
+#             same Neon database (or a separate dev branch on Neon).
+#             If DATABASE_URL is absent, Django falls back to local SQLite so
+#             you can run the project without any setup at all.
+#
+# SSL:        Neon always requires SSL.  ssl_require=True is harmless for
+#             local SQLite (dj-database-url ignores it for sqlite:// URLs).
+# ==============================================================================
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=f'sqlite:///{db_location}',
-        conn_max_age=600
+        default=os.environ.get('DATABASE_URL', f'sqlite:///{BASE_DIR / "db.sqlite3"}'),
+        conn_max_age=600,
+        # ssl_require only applies when pointing at Neon/Postgres.
+        # SQLite (the local fallback) doesn't accept sslmode and will crash if True.
+        ssl_require=bool(os.environ.get('DATABASE_URL')),
     )
 }
 
