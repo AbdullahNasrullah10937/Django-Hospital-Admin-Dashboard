@@ -56,13 +56,14 @@ body {
     background-color: var(--bp-sidebar-bg) !important;
 }
 
-/* Logo icon: add a subtle primary-tinted ring so the white logo
-   square doesn't disappear against the dark panel. */
-.bp-sidebar .offcanvas-header img,
-.bp-sidebar .offcanvas-body img {
+/* Logo icon: subtle ring so the blue icon pops on the dark panel.
+   Scoped to .bp-sidebar-logo only — avoids accidentally styling
+   notification avatars or other images inside offcanvas-body. */
+.bp-sidebar-logo {
     border-radius: 0.5rem;
     outline: 2px solid rgba(255,255,255,0.15);
     background-color: var(--bp-primary);
+    flex-shrink: 0;
 }
 
 /* Desktop: fixed left panel below header */

@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{% block title %}BP Hospitals - Admin Console{% endblock %}</title>
     
+    <!-- Favicon: BP Hospitals logo icon shown in browser tab -->
+    <link rel="icon" type="image/png" href="{% static 'img/logo_icon.png' %}" />
+    <link rel="apple-touch-icon" href="{% static 'img/logo_icon.png' %}" />
+
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,7 +49,7 @@
                        value="{{ search_query|default:'' }}"
                        placeholder="Search network..."
                        class="form-control ps-5 rounded-pill bg-light border-0"
-                       style="width: 240px;" />
+                       style="width: clamp(160px, 20vw, 280px);" />
             </form>
         </div>
 
@@ -73,7 +77,7 @@
                 <!-- Notifications panel -->
                 <div class="dropdown-menu dropdown-menu-end p-0 overflow-hidden"
                      aria-labelledby="notificationsDropdown"
-                     style="width:320px;max-height:420px;">
+                     style="width: min(320px, calc(100vw - 1.5rem)); max-height:420px;">
                     <div class="p-3 bg-primary text-white d-flex align-items-center justify-content-between">
                         <h6 class="mb-0 fw-semibold"><i class="bi bi-bell-fill me-2"></i>Recent Activity</h6>
                         <span class="badge bg-light text-primary">{{ notifications|length }}</span>
@@ -171,7 +175,7 @@
         <!-- Offcanvas header (close button visible only on mobile) -->
         <div class="offcanvas-header border-bottom border-secondary border-opacity-25">
             <div class="d-flex align-items-center gap-2">
-                <img src="{% static 'img/logo_icon.png' %}" alt="Logo" style="height:32px;width:auto;" />
+                <img src="{% static 'img/logo_icon.png' %}" alt="Logo" class="bp-sidebar-logo" style="height:32px;width:auto;" />
                 <h5 class="offcanvas-title text-white fw-bold mb-0" id="sidebarOffcanvasLabel">BP Hospitals</h5>
             </div>
             <button type="button"
@@ -187,7 +191,7 @@
             <!-- Logo block (only rendered at desktop, redundant on mobile
                  since offcanvas-header already shows it) -->
             <div class="d-none d-md-flex align-items-center gap-3 mb-4 px-2">
-                <img src="{% static 'img/logo_icon.png' %}" alt="BP Hospitals" style="height:40px;width:auto;" />
+                <img src="{% static 'img/logo_icon.png' %}" alt="BP Hospitals" class="bp-sidebar-logo" style="height:40px;width:auto;" />
                 <div>
                     <h1 class="text-white fw-bold h6 mb-0 lh-1">BP Hospitals</h1>
                     <small class="text-info" style="font-size:0.7rem;">Admin Console</small>
