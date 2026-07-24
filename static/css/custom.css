@@ -42,8 +42,27 @@ body {
 /* ── Sidebar (shared desktop + offcanvas-mobile) ────── */
 .bp-sidebar {
     width: var(--sidebar-width) !important;
-    background-color: var(--bp-sidebar-bg);
+    /* Override Bootstrap's --bs-offcanvas-bg (#fff) which bleeds into
+       .offcanvas-body and washes out everything designed for a dark bg. */
+    --bs-offcanvas-bg: var(--bp-sidebar-bg);
+    background-color: var(--bp-sidebar-bg) !important;
     color: #f8fafc;
+}
+
+/* Guarantee every child container inside the sidebar is dark —
+   Bootstrap sets .offcanvas-header and .offcanvas-body independently. */
+.bp-sidebar .offcanvas-header,
+.bp-sidebar .offcanvas-body {
+    background-color: var(--bp-sidebar-bg) !important;
+}
+
+/* Logo icon: add a subtle primary-tinted ring so the white logo
+   square doesn't disappear against the dark panel. */
+.bp-sidebar .offcanvas-header img,
+.bp-sidebar .offcanvas-body img {
+    border-radius: 0.5rem;
+    outline: 2px solid rgba(255,255,255,0.15);
+    background-color: var(--bp-primary);
 }
 
 /* Desktop: fixed left panel below header */
@@ -80,14 +99,50 @@ body {
     flex-shrink: 0;
 }
 
-.bp-sidebar .nav-link:hover {
-    color: #ffffff;
-    background-color: rgba(255,255,255,0.08);
+/* Use !important so Bootstrap specificity cannot flip text back to
+   an illegible colour when the dark bg is correctly rendered. */
+.bp-sidebar .nav-link:hover,
+.bp-sidebar .nav-link:focus {
+    color: #ffffff !important;
+    background-color: rgba(255,255,255,0.10) !important;
 }
 
 .bp-sidebar .nav-link.active {
-    color: #ffffff;
-    background-color: var(--bp-primary);
+    color: #ffffff !important;
+    background-color: var(--bp-primary) !important;
+}
+
+/* ── Sidebar Logout button ───────────────────────────── */
+/* btn-outline-light renders as white text/border on dark bg — correct in
+   theory, but if Bootstrap's offcanvas white bg bleeds through the button
+   becomes invisible.  Use an explicit class instead. */
+.bp-sidebar-logout {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: #94a3b8;          /* same muted slate as inactive nav links */
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+.bp-sidebar-logout i {
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.bp-sidebar-logout:hover,
+.bp-sidebar-logout:focus {
+    color: #ffffff !important;
+    background-color: rgba(255,255,255,0.10) !important;
+    outline: none;
 }
 
 /* ── Main Content Area ──────────────────────────────── */
