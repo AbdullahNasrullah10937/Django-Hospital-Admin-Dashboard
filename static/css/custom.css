@@ -191,7 +191,8 @@ body {
 
 .table-responsive {
     border-radius: 0.5rem;
-    overflow: hidden;          /* clip the rounded corners */
+    overflow-x: auto;          /* allow horizontal scrolling on small screens */
+    -webkit-overflow-scrolling: touch;
 }
 
 /* ── Buttons ─────────────────────────────────────────── */
